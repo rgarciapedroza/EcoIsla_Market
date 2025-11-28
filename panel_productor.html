@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Área productor | EcoIsla Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__logo">
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
+      <div>
+        <h1>EcoIsla Market</h1>
+        <p>Sabor local, raíz ecológica</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html" class="nav__link">Inicio</a>
+      <a href="productos.html" class="nav__link">Productos</a>
+      <a href="ecobox.html" class="nav__link">EcoBox</a>
+      <a href="productores.html" class="nav__link">Productores</a>
+      <a href="contacto.html" class="nav__link">Contacto</a>
+      <a
+        href="panel_productor.html"
+        id="producerNav"
+        class="nav__link nav__link--active"
+        style="display: none;"
+      >
+        Área productor
+      </a>
+    </nav>
+
+    <div class="header__cart">
+      <span id="userInfo" class="header__user"></span>
+      <button id="loginBtn" class="header__auth-btn" type="button">
+        Iniciar sesión
+      </button>
+      <button
+        id="logoutBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none;"
+      >
+        Cerrar sesión
+      </button>
+      <span id="cartCount">Carrito (0)</span>
+    </div>
+
+    <button class="nav__toggle" id="navToggle">☰</button>
+  </header>
+
+  <main>
+    <section id="producerPanel" class="section section--light">
+      <h2>Área de productor</h2>
+      <p id="producerPanelInfo">
+        Cargando información de tu perfil de productor...
+      </p>
+
+      <form
+        id="addProductForm"
+        class="form"
+        style="margin-bottom: 1.5rem; display: none;"
+        enctype="multipart/form-data"
+        >
+        <label>
+            Nombre
+            <input type="text" name="name" required />
+        </label>
+
+        <label>
+            Origen
+            <input
+            type="text"
+            name="origin"
+            placeholder="Gran Canaria, Tenerife..."
+            />
+        </label>
+
+        <label>
+            Precio (€)
+            <input type="number" step="0.01" name="price" required />
+        </label>
+
+        <label>
+            Imagen del producto
+            <input type="file" name="image" accept="image/*" />
+        </label>
+
+        <button type="submit" class="btn btn--primary">
+            Añadir producto
+        </button>
+        </form>
+
+
+      <h3>Mis productos en venta</h3>
+      <div id="producerProductsAdmin">
+        <!-- JS carga aquí la tabla de productos del productor -->
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>EcoIsla Market</h3>
+        <p>
+          Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero
+          y comercio justo.
+        </p>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <p>Email: info@ecoisla-market.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+      <div class="footer__col">
+        <h4>Síguenos</h4>
+        <p>Instagram · Facebook · X</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 EcoIsla Market. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

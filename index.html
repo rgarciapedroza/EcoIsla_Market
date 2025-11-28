@@ -24,103 +24,95 @@
       <a href="ecobox.html" class="nav__link">EcoBox</a>
       <a href="productores.html" class="nav__link">Productores</a>
       <a href="contacto.html" class="nav__link">Contacto</a>
+      <a
+        href="panel_productor.html"
+        id="producerNav"
+        class="nav__link"
+        style="display: none;"
+      >
+        Área productor
+      </a>
     </nav>
 
     <div class="header__cart">
+      <span id="userInfo" class="header__user"></span>
+      <button id="loginBtn" class="header__auth-btn" type="button">
+        Iniciar sesión
+      </button>
+      <button
+        id="logoutBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none;"
+      >
+        Cerrar sesión
+      </button>
       <span id="cartCount">Carrito (0)</span>
     </div>
 
     <button class="nav__toggle" id="navToggle">☰</button>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero__content">
-        <h2>Productos ecológicos de Canarias, directos del campo a tu mesa</h2>
-        <p>
-          EcoIsla Market conecta a pequeños agricultores canarios con personas y negocios
-          que buscan alimentos frescos, locales y sostenibles.
-        </p>
-        <div class="hero__actions">
-          <a href="productos.html" class="btn btn--primary">Ver productos</a>
-          <a href="ecobox.html" class="btn btn--outline">Descubre EcoBox</a>
-        </div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__content">
+      <h2>Conecta con productores ecológicos de las Islas Canarias</h2>
+      <p>
+        EcoIsla Market es una plataforma cooperativa que acerca a las familias
+        productos frescos, locales y de temporada, respetando el medio ambiente
+        y garantizando un precio justo para los productores.
+      </p>
+      <div class="hero__actions">
+        <a href="productos.html" class="btn btn--primary">Ver productos</a>
+        <a href="ecobox.html" class="btn btn--outline">Descubrir EcoBox</a>
       </div>
-      <div class="hero__image">
-        <img src="img/hero-frutas.png" alt="Cesta de frutas y verduras ecológicas" />
-      </div>
-    </section>
+    </div>
 
-    <!-- VENTAJAS -->
-    <section class="section section--light">
-      <h2>¿Por qué EcoIsla Market?</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>Producto local</h3>
-          <p>Trabajamos con agricultores de las distintas islas para reducir la huella de carbono.</p>
-        </article>
-        <article class="card">
-          <h3>100% ecológico</h3>
-          <p>Producción respetuosa con el medio ambiente y sin químicos innecesarios.</p>
-        </article>
-        <article class="card">
-          <h3>Comercio justo</h3>
-          <p>Precios justos para el productor y transparentes para el consumidor.</p>
-        </article>
-      </div>
-    </section>
+    <div class="hero__image">
+      <img src="img/hero-ecoisla.jpg" alt="Cesta de productos ecológicos canarios" />
+    </div>
+  </section>
 
-    <!-- PRODUCTOS DESTACADOS -->
-    <section class="section">
-      <div class="section__header">
-        <h2>Productos destacados</h2>
-        <a href="productos.html" class="link">Ver todo el catálogo →</a>
-      </div>
-      <div class="grid grid--productos">
-        <article class="producto">
-          <img src="img/producto-naranjas.png" alt="Naranjas ecológicas" />
-          <h3>Naranjas ecológicas</h3>
-          <p>Origen: Tenerife</p>
-          <p class="producto__precio">2,50 €/kg</p>
-          <button class="btn btn--small add-to-cart" data-name="Naranjas ecológicas">Añadir al carrito</button>
-        </article>
+  <!-- VALORES -->
+  <section class="section section--light">
+    <div class="section__header">
+      <h3>Nuestros valores</h3>
+    </div>
+    <div class="section__content">
+      <ul class="lista-valores">
+        <li><strong>Km 0:</strong> productos locales de las distintas islas.</li>
+        <li><strong>Sostenibilidad:</strong> apostamos por prácticas agrícolas respetuosas.</li>
+        <li><strong>Comercio justo:</strong> precios transparentes y dignos para los productores.</li>
+        <li><strong>Calidad:</strong> productos frescos, de temporada y con trazabilidad.</li>
+      </ul>
+    </div>
+  </section>
 
-        <article class="producto">
-          <img src="img/producto-tomates.png" alt="Tomates ecológicos" />
-          <h3>Tomates de rama</h3>
-          <p>Origen: Gran Canaria</p>
-          <p class="producto__precio">3,10 €/kg</p>
-          <button class="btn btn--small add-to-cart" data-name="Tomates de rama">Añadir al carrito</button>
-        </article>
-
-        <article class="producto">
-          <img src="img/producto-miel.png" alt="Miel ecológica" />
-          <h3>Miel de floración canaria</h3>
-          <p>Origen: La Palma</p>
-          <p class="producto__precio">6,90 €/tarro</p>
-          <button class="btn btn--small add-to-cart" data-name="Miel de floración canaria">Añadir al carrito</button>
-        </article>
-      </div>
-    </section>
-
-    <!-- ECOBOX BLOCK -->
-    <section class="section section--highlight">
-      <div class="section__content">
-        <h2>EcoBox: tu caja semanal de productos de temporada</h2>
-        <p>Recibe una selección de frutas y verduras frescas directamente de los campos canarios.</p>
-        <a href="ecobox.html" class="btn btn--primary">Ver opciones de EcoBox</a>
-      </div>
-    </section>
-  </main>
+  <!-- CÓMO FUNCIONA -->
+  <section class="section">
+    <div class="section__header">
+      <h3>¿Cómo funciona EcoIsla Market?</h3>
+    </div>
+    <ol class="pasos">
+      <li>Explora el catálogo de productos y EcoBox en la plataforma.</li>
+      <li>Crea tu cuenta e inicia sesión para guardar tu carrito.</li>
+      <li>Selecciona los productos que quieres recibir cada semana.</li>
+      <li>
+        Los productores preparan y envían los pedidos a los puntos de recogida
+        o a domicilio (según disponibilidad).
+      </li>
+    </ol>
+  </section>
 
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__cols">
       <div class="footer__col">
         <h3>EcoIsla Market</h3>
-        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+        <p>
+          Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero
+          y comercio justo.
+        </p>
       </div>
       <div class="footer__col">
         <h4>Contacto</h4>

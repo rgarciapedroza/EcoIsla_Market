@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Acceso | EcoIsla Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <main>
+    <section
+      class="section section--light"
+      style="max-width: 480px; margin: 4rem auto; border-radius: 12px;"
+    >
+      <div style="text-align: center; margin-bottom: 1rem;">
+        <img
+          src="img/logo-ecoisla.png"
+          alt="Logo EcoIsla Market"
+          style="height: 48px; object-fit: contain;"
+        />
+        <h1 style="margin: 0.5rem 0 0;">EcoIsla Market</h1>
+        <p style="margin: 0.2rem 0; color: #666;">Acceso a tu cuenta</p>
+      </div>
+
+      <div
+        style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;"
+      >
+        <button type="button" id="btnShowLogin" class="btn btn--small">
+          Iniciar sesión
+        </button>
+        <button
+          type="button"
+          id="btnShowRegister"
+          class="btn btn--small btn--outline"
+        >
+          Registrarse
+        </button>
+      </div>
+
+      <div
+        id="authError"
+        style="color: #c0392b; font-size: 0.9rem; margin-bottom: 0.8rem;"
+      ></div>
+
+      <!-- FORMULARIO LOGIN -->
+      <form id="loginForm" class="form">
+        <label>
+          Email
+          <input type="email" name="email" required />
+        </label>
+
+        <label>
+          Contraseña
+          <input type="password" name="password" required />
+        </label>
+
+        <button
+          type="submit"
+          class="btn btn--primary"
+          style="width: 100%; margin-top: 0.5rem;"
+        >
+          Entrar
+        </button>
+      </form>
+
+      <!-- FORMULARIO REGISTRO -->
+      <form
+        id="registerForm"
+        class="form"
+        style="display: none; margin-top: 0.5rem;"
+      >
+        <label>
+          Nombre
+          <input type="text" name="name" required />
+        </label>
+
+        <label>
+          Email
+          <input type="email" name="email" required />
+        </label>
+
+        <label>
+          Contraseña
+          <input type="password" name="password" required />
+        </label>
+
+        <p style="font-size: 0.85rem; color: #666;">
+          El registro está pensado para usuarios que realizan pedidos en EcoIsla
+          Market. Los productores deben contactar con el equipo para validar su
+          cuenta profesional.
+        </p>
+
+        <button
+          type="submit"
+          class="btn btn--primary"
+          style="width: 100%; margin-top: 0.5rem;"
+        >
+          Crear cuenta
+        </button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

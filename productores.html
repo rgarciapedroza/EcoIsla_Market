@@ -8,6 +8,7 @@
   <script defer src="js/main.js"></script>
 </head>
 <body>
+  <!-- HEADER -->
   <header class="header">
     <div class="header__logo">
       <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
@@ -23,9 +24,29 @@
       <a href="ecobox.html" class="nav__link">EcoBox</a>
       <a href="productores.html" class="nav__link nav__link--active">Productores</a>
       <a href="contacto.html" class="nav__link">Contacto</a>
+      <a
+        href="panel_productor.html"
+        id="producerNav"
+        class="nav__link"
+        style="display: none;"
+      >
+        Área productor
+      </a>
     </nav>
 
     <div class="header__cart">
+      <span id="userInfo" class="header__user"></span>
+      <button id="loginBtn" class="header__auth-btn" type="button">
+        Iniciar sesión
+      </button>
+      <button
+        id="logoutBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none;"
+      >
+        Cerrar sesión
+      </button>
       <span id="cartCount">Carrito (0)</span>
     </div>
 
@@ -34,55 +55,86 @@
 
   <main>
     <section class="section">
-      <h2>Nuestros productores</h2>
+      <div class="section__header">
+        <h3>Productores que forman parte de EcoIsla Market</h3>
+      </div>
       <p>
-        EcoIsla Market nace de la unión de pequeños agricultores de distintas islas del archipiélago.
-        Apostamos por explotaciones familiares y cooperativas locales que trabajan con criterios ecológicos.
+        EcoIsla Market trabaja con productores seleccionados de distintas islas del
+        archipiélago. Antes de incorporarse a la plataforma, se revisan sus prácticas
+        agrícolas, autorizaciones sanitarias y compromiso con la sostenibilidad.
       </p>
+    </section>
 
+    <section class="section section--light">
       <div class="grid grid--productores">
         <article class="productor">
-          <h3>Finca El Lagar</h3>
+          <h4>Finca La Vega</h4>
           <p><strong>Isla:</strong> Gran Canaria</p>
-          <p><strong>Productos:</strong> tomates, pepinos, calabacines.</p>
+          <p><strong>Especialidad:</strong> tomates, lechugas y verduras de hoja.</p>
+          <p>
+            Finca familiar con más de 20 años de experiencia en agricultura ecológica
+            certificada, centrada en productos de proximidad.
+          </p>
         </article>
 
         <article class="productor">
-          <h3>EcoFinca La Palma</h3>
-          <p><strong>Isla:</strong> La Palma</p>
-          <p><strong>Productos:</strong> plátano ecológico, aguacate.</p>
-        </article>
-
-        <article class="productor">
-          <h3>Huerto El Teide</h3>
+          <h4>AgroTierra Norte</h4>
           <p><strong>Isla:</strong> Tenerife</p>
-          <p><strong>Productos:</strong> naranjas, limones, lechugas.</p>
+          <p><strong>Especialidad:</strong> naranjas, aguacates y cítricos.</p>
+          <p>
+            Cooperativa de pequeños productores de la zona norte, comprometidos con el
+            respeto al suelo y el uso eficiente del agua.
+          </p>
         </article>
 
         <article class="productor">
-          <h3>Granja Jandía</h3>
+          <h4>EcoPlatanera La Palma</h4>
+          <p><strong>Isla:</strong> La Palma</p>
+          <p><strong>Especialidad:</strong> plátano ecológico de exportación.</p>
+          <p>
+            Fincas asociadas que han reconvertido sus cultivos a modelos sostenibles,
+            reduciendo el uso de fitosanitarios convencionales.
+          </p>
+        </article>
+
+        <article class="productor">
+          <h4>Granja Costa Azul</h4>
           <p><strong>Isla:</strong> Fuerteventura</p>
-          <p><strong>Productos:</strong> huevos camperos, verduras de clima seco.</p>
+          <p><strong>Especialidad:</strong> huevos camperos y hortalizas.</p>
+          <p>
+            Granja con gallinas en semilibertad y huerto diversificado, enfocada en el
+            bienestar animal y la venta de proximidad.
+          </p>
         </article>
       </div>
     </section>
 
-    <section class="section section--light">
-      <h2>Valores de la cooperativa</h2>
-      <ul class="lista-valores">
-        <li>Sostenibilidad ambiental y respeto al territorio insular.</li>
-        <li>Apoyo al pequeño productor local y fijación de población en zonas rurales.</li>
-        <li>Transparencia en precios y trazabilidad de los productos.</li>
-        <li>Impulso de un modelo de consumo responsable y de kilómetro cero.</li>
-      </ul>
+    <section class="section">
+      <div class="section__header">
+        <h3>¿Quieres ser productor en EcoIsla Market?</h3>
+      </div>
+      <p>
+        Si eres productor en Canarias y te interesa formar parte de la plataforma, ponte en
+        contacto con el equipo de EcoIsla Market. Revisaremos tu proyecto, documentación
+        sanitaria y modelo de producción para garantizar que cumple con los estándares de
+        calidad y sostenibilidad de la cooperativa.
+      </p>
+      <p>
+        Una vez validado, se te habilitará un perfil de productor desde el que podrás
+        gestionar tus productos (altas, bajas y modificaciones) dentro de la web.
+      </p>
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__cols">
       <div class="footer__col">
         <h3>EcoIsla Market</h3>
-        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+        <p>
+          Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero
+          y comercio justo.
+        </p>
       </div>
       <div class="footer__col">
         <h4>Contacto</h4>

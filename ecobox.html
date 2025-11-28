@@ -8,6 +8,7 @@
   <script defer src="js/main.js"></script>
 </head>
 <body>
+  <!-- HEADER -->
   <header class="header">
     <div class="header__logo">
       <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
@@ -23,82 +24,115 @@
       <a href="ecobox.html" class="nav__link nav__link--active">EcoBox</a>
       <a href="productores.html" class="nav__link">Productores</a>
       <a href="contacto.html" class="nav__link">Contacto</a>
+      <a
+        href="panel_productor.html"
+        id="producerNav"
+        class="nav__link"
+        style="display: none;"
+      >
+        Área productor
+      </a>
     </nav>
 
     <div class="header__cart">
+      <span id="userInfo" class="header__user"></span>
+      <button id="loginBtn" class="header__auth-btn" type="button">
+        Iniciar sesión
+      </button>
+      <button
+        id="logoutBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none;"
+      >
+        Cerrar sesión
+      </button>
       <span id="cartCount">Carrito (0)</span>
     </div>
 
     <button class="nav__toggle" id="navToggle">☰</button>
   </header>
 
-  <main>
-    <section class="hero hero--small">
-      <div class="hero__content">
-        <h2>EcoBox: tu caja ecológica de temporada</h2>
-        <p>Recibe una selección semanal de frutas y verduras frescas, directamente de los campos canarios.</p>
-      </div>
-    </section>
+  <!-- HERO ECOBOX -->
+  <section class="hero hero--small">
+    <div class="hero__content">
+      <h2>EcoBox: tu caja semanal de productos ecológicos</h2>
+      <p>
+        Diseñada para diferentes tipos de hogares, EcoBox reúne una selección de
+        productos frescos y de temporada, directamente desde las fincas canarias
+        adheridas a la cooperativa.
+      </p>
+    </div>
 
-    <section class="section">
-      <h2>Elige la EcoBox que mejor se adapte a ti</h2>
-      <div class="cards cards--ecobox">
-        <article class="card">
-          <h3>EcoBox Pequeña</h3>
-          <p>Ideal para 1-2 personas. Incluye 4-5 productos de temporada.</p>
-          <ul>
-            <li>Frutas variadas</li>
-            <li>2 tipos de verdura</li>
-            <li>Recetas sugeridas</li>
-          </ul>
-          <p class="card__price">Desde 15 €/semana</p>
-        </article>
+    <div class="hero__image">
+      <img src="img/ecobox-familia.jpg" alt="EcoBox con productos variados" />
+    </div>
+  </section>
 
-        <article class="card">
-          <h3>EcoBox Familiar</h3>
-          <p>Perfecta para familias de 3-4 personas. Entre 7 y 9 productos de temporada.</p>
-          <ul>
-            <li>Selección amplia de frutas y verduras</li>
-            <li>Incluye producto estrella de la semana</li>
-            <li>Opción de añadir huevos o miel</li>
-          </ul>
-          <p class="card__price">Desde 25 €/semana</p>
-        </article>
+  <!-- TIPOS DE ECOBOX -->
+  <section class="section section--light">
+    <div class="section__header">
+      <h3>Tipos de EcoBox</h3>
+    </div>
 
-        <article class="card">
-          <h3>EcoBox Oficina</h3>
-          <p>Fruta fresca para compartir en el trabajo.</p>
-          <ul>
-            <li>Fruta lista para consumir</li>
-            <li>Formato perfecto para salas de descanso</li>
-            <li>Entrega en horario laboral</li>
-          </ul>
-          <p class="card__price">Desde 20 €/semana</p>
-        </article>
-      </div>
-    </section>
+    <div class="cards cards--ecobox">
+      <article class="card">
+        <h4>EcoBox Individual</h4>
+        <p>Ideal para 1 persona o parejas que comen poco en casa.</p>
+        <p class="card__price">Desde 15 €/semana</p>
+        <ul class="lista-valores">
+          <li>Frutas y verduras de temporada</li>
+          <li>Cantidad ajustada para evitar desperdicio</li>
+          <li>Opcional: añadir huevos o miel</li>
+        </ul>
+      </article>
 
-    <section class="section section--light">
-      <h2>¿Cómo funciona?</h2>
-      <ol class="pasos">
-        <li>Elige el tipo de EcoBox y la frecuencia (semanal o quincenal).</li>
-        <li>Seleccionamos productos frescos de agricultores locales de varias islas.</li>
-        <li>Recibes tu EcoBox en casa o en un punto de recogida colaborador.</li>
-      </ol>
-    </section>
+      <article class="card">
+        <h4>EcoBox Familiar</h4>
+        <p>Pensada para familias de 3-4 personas.</p>
+        <p class="card__price">Desde 25 €/semana</p>
+        <ul class="lista-valores">
+          <li>Mayor variedad de fruta y verdura</li>
+          <li>Posibilidad de incluir productos extra</li>
+          <li>Ideal para organización semanal de menús</li>
+        </ul>
+      </article>
 
-    <section class="section section--highlight">
-      <h2>¿Te animas a probar EcoBox?</h2>
-      <p>Rellena el formulario de contacto indicando qué tipo de EcoBox te interesa.</p>
-      <a href="contacto.html" class="btn btn--primary">Quiero más información</a>
-    </section>
-  </main>
+      <article class="card">
+        <h4>EcoBox Oficina</h4>
+        <p>Perfecta para compartir fruta fresca en el trabajo.</p>
+        <p class="card__price">Desde 20 €/semana</p>
+        <ul class="lista-valores">
+          <li>Selección de fruta fácil de consumir</li>
+          <li>Entrega en puntos acordados</li>
+          <li>Refuerzo de hábitos saludables en el equipo</li>
+        </ul>
+      </article>
+    </div>
+  </section>
 
+  <!-- PROCESO -->
+  <section class="section">
+    <div class="section__header">
+      <h3>¿Cómo se prepara tu EcoBox?</h3>
+    </div>
+    <ol class="pasos">
+      <li>Los productores actualizan semanalmente la disponibilidad de productos.</li>
+      <li>EcoIsla diseña las combinaciones de EcoBox según la producción local.</li>
+      <li>Se preparan las cajas el día anterior a la entrega.</li>
+      <li>El usuario recoge su EcoBox en el punto indicado o recibe el envío a domicilio (donde esté disponible).</li>
+    </ol>
+  </section>
+
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__cols">
       <div class="footer__col">
         <h3>EcoIsla Market</h3>
-        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+        <p>
+          Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero
+          y comercio justo.
+        </p>
       </div>
       <div class="footer__col">
         <h4>Contacto</h4>

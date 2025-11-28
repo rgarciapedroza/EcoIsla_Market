@@ -84,9 +84,33 @@
   }
   
   .header__cart {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-primary);
+  }
+  
+  /* info usuario + botones sesión */
+  .header__user {
+    margin-right: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+  
+  .header__auth-btn {
+    background: none;
+    border: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-right: 0.25rem;
+    color: var(--color-primary);
+    padding: 0;
+  }
+  
+  .header__auth-btn:hover {
+    text-decoration: underline;
   }
   
   .nav__toggle {
@@ -326,6 +350,25 @@
     font-size: 0.95rem;
     color: var(--color-primary);
     text-decoration: none;
+  }
+  
+  /* TABLA ÁREA PRODUCTOR */
+  .tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .tabla-productos th,
+  .tabla-productos td {
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 0.4rem;
+    text-align: left;
+  }
+  
+  .tabla-productos th {
+    background: #f1f1f1;
   }
   
   /* FOOTER */
