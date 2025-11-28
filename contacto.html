@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contacto | EcoIsla Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="header__logo">
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
+      <div>
+        <h1>EcoIsla Market</h1>
+        <p>Sabor local, raíz ecológica</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html" class="nav__link">Inicio</a>
+      <a href="productos.html" class="nav__link">Productos</a>
+      <a href="ecobox.html" class="nav__link">EcoBox</a>
+      <a href="productores.html" class="nav__link">Productores</a>
+      <a href="contacto.html" class="nav__link nav__link--active">Contacto</a>
+    </nav>
+
+    <div class="header__cart">
+      <span id="cartCount">Carrito (0)</span>
+    </div>
+
+    <button class="nav__toggle" id="navToggle">☰</button>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>Contacto</h2>
+      <p>
+        ¿Tienes dudas, quieres hacer un pedido especial o solicitar EcoBox para tu casa,
+        tu oficina o tu negocio de restauración?
+      </p>
+
+      <div class="contacto-layout">
+        <form class="form">
+          <label>
+            Nombre
+            <input type="text" name="nombre" required />
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+
+          <label>
+            Asunto
+            <select name="asunto">
+              <option>Información general</option>
+              <option>EcoBox</option>
+              <option>Restauración / comercio</option>
+              <option>Colaboraciones</option>
+            </select>
+          </label>
+
+          <label>
+            Mensaje
+            <textarea name="mensaje" rows="5" required></textarea>
+          </label>
+
+          <button type="submit" class="btn btn--primary">Enviar mensaje</button>
+        </form>
+
+        <div class="contacto-info">
+          <h3>Información de contacto</h3>
+          <p>Email: info@ecoisla-market.com</p>
+          <p>Teléfono: +34 600 000 000</p>
+          <p>
+            Zona de reparto inicial: principales municipios de Gran Canaria.
+            Ampliación progresiva a otras islas según la fase del proyecto.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>EcoIsla Market</h3>
+        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <p>Email: info@ecoisla-market.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+      <div class="footer__col">
+        <h4>Síguenos</h4>
+        <p>Instagram · Facebook · X</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 EcoIsla Market. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

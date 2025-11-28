@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Productos | EcoIsla Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="header__logo">
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
+      <div>
+        <h1>EcoIsla Market</h1>
+        <p>Sabor local, raíz ecológica</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html" class="nav__link">Inicio</a>
+      <a href="productos.html" class="nav__link nav__link--active">Productos</a>
+      <a href="ecobox.html" class="nav__link">EcoBox</a>
+      <a href="productores.html" class="nav__link">Productores</a>
+      <a href="contacto.html" class="nav__link">Contacto</a>
+    </nav>
+
+    <div class="header__cart">
+      <span id="cartCount">Carrito (0)</span>
+    </div>
+
+    <button class="nav__toggle" id="navToggle">☰</button>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="section__header">
+        <div>
+          <h2>Catálogo de productos</h2>
+          <p>Frutas, verduras, miel, gofio, legumbres y más, de producción ecológica canaria.</p>
+        </div>
+      </div>
+
+      <!-- FILTROS SOLO VISUALES -->
+      <div class="filtros">
+        <label>
+          Categoría
+          <select>
+            <option>Todos</option>
+            <option>Frutas</option>
+            <option>Verduras</option>
+            <option>Huevos</option>
+            <option>Miel y derivados</option>
+            <option>Otros</option>
+          </select>
+        </label>
+
+        <label>
+          Isla de origen
+          <select>
+            <option>Todas</option>
+            <option>Gran Canaria</option>
+            <option>Tenerife</option>
+            <option>Lanzarote</option>
+            <option>Fuerteventura</option>
+            <option>La Palma</option>
+            <option>La Gomera</option>
+            <option>El Hierro</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- GRID DE PRODUCTOS -->
+      <div class="grid grid--productos">
+        <article class="producto">
+          <img src="img/producto-naranjas.png" alt="Naranjas ecológicas" />
+          <h3>Naranjas ecológicas</h3>
+          <p>Origen: Tenerife</p>
+          <p class="producto__precio">2,50 €/kg</p>
+          <button class="btn btn--small add-to-cart" data-name="Naranjas ecológicas">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-platanos.png" alt="Plátanos ecológicos" />
+          <h3>Plátanos ecológicos</h3>
+          <p>Origen: La Palma</p>
+          <p class="producto__precio">2,80 €/kg</p>
+          <button class="btn btn--small add-to-cart" data-name="Plátanos ecológicos">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-tomates.png" alt="Tomates ecológicos" />
+          <h3>Tomates de rama</h3>
+          <p>Origen: Gran Canaria</p>
+          <p class="producto__precio">3,10 €/kg</p>
+          <button class="btn btn--small add-to-cart" data-name="Tomates de rama">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-lechuga.png" alt="Lechuga ecológica" />
+          <h3>Lechuga ecológica</h3>
+          <p>Origen: Fuerteventura</p>
+          <p class="producto__precio">1,70 €/unidad</p>
+          <button class="btn btn--small add-to-cart" data-name="Lechuga ecológica">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-huevos.png" alt="Huevos camperos" />
+          <h3>Huevos ecológicos (docena)</h3>
+          <p>Origen: Gran Canaria</p>
+          <p class="producto__precio">3,60 €/docena</p>
+          <button class="btn btn--small add-to-cart" data-name="Huevos ecológicos (docena)">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-miel.png" alt="Miel ecológica" />
+          <h3>Miel de floración canaria</h3>
+          <p>Origen: La Palma</p>
+          <p class="producto__precio">6,90 €/tarro</p>
+          <button class="btn btn--small add-to-cart" data-name="Miel de floración canaria">Añadir al carrito</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>EcoIsla Market</h3>
+        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <p>Email: info@ecoisla-market.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+      <div class="footer__col">
+        <h4>Síguenos</h4>
+        <p>Instagram · Facebook · X</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 EcoIsla Market. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

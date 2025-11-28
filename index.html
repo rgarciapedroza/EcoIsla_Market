@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inicio | EcoIsla Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__logo">
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
+      <div>
+        <h1>EcoIsla Market</h1>
+        <p>Sabor local, raíz ecológica</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html" class="nav__link nav__link--active">Inicio</a>
+      <a href="productos.html" class="nav__link">Productos</a>
+      <a href="ecobox.html" class="nav__link">EcoBox</a>
+      <a href="productores.html" class="nav__link">Productores</a>
+      <a href="contacto.html" class="nav__link">Contacto</a>
+    </nav>
+
+    <div class="header__cart">
+      <span id="cartCount">Carrito (0)</span>
+    </div>
+
+    <button class="nav__toggle" id="navToggle">☰</button>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__content">
+        <h2>Productos ecológicos de Canarias, directos del campo a tu mesa</h2>
+        <p>
+          EcoIsla Market conecta a pequeños agricultores canarios con personas y negocios
+          que buscan alimentos frescos, locales y sostenibles.
+        </p>
+        <div class="hero__actions">
+          <a href="productos.html" class="btn btn--primary">Ver productos</a>
+          <a href="ecobox.html" class="btn btn--outline">Descubre EcoBox</a>
+        </div>
+      </div>
+      <div class="hero__image">
+        <img src="img/hero-frutas.png" alt="Cesta de frutas y verduras ecológicas" />
+      </div>
+    </section>
+
+    <!-- VENTAJAS -->
+    <section class="section section--light">
+      <h2>¿Por qué EcoIsla Market?</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Producto local</h3>
+          <p>Trabajamos con agricultores de las distintas islas para reducir la huella de carbono.</p>
+        </article>
+        <article class="card">
+          <h3>100% ecológico</h3>
+          <p>Producción respetuosa con el medio ambiente y sin químicos innecesarios.</p>
+        </article>
+        <article class="card">
+          <h3>Comercio justo</h3>
+          <p>Precios justos para el productor y transparentes para el consumidor.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS DESTACADOS -->
+    <section class="section">
+      <div class="section__header">
+        <h2>Productos destacados</h2>
+        <a href="productos.html" class="link">Ver todo el catálogo →</a>
+      </div>
+      <div class="grid grid--productos">
+        <article class="producto">
+          <img src="img/producto-naranjas.png" alt="Naranjas ecológicas" />
+          <h3>Naranjas ecológicas</h3>
+          <p>Origen: Tenerife</p>
+          <p class="producto__precio">2,50 €/kg</p>
+          <button class="btn btn--small add-to-cart" data-name="Naranjas ecológicas">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-tomates.png" alt="Tomates ecológicos" />
+          <h3>Tomates de rama</h3>
+          <p>Origen: Gran Canaria</p>
+          <p class="producto__precio">3,10 €/kg</p>
+          <button class="btn btn--small add-to-cart" data-name="Tomates de rama">Añadir al carrito</button>
+        </article>
+
+        <article class="producto">
+          <img src="img/producto-miel.png" alt="Miel ecológica" />
+          <h3>Miel de floración canaria</h3>
+          <p>Origen: La Palma</p>
+          <p class="producto__precio">6,90 €/tarro</p>
+          <button class="btn btn--small add-to-cart" data-name="Miel de floración canaria">Añadir al carrito</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- ECOBOX BLOCK -->
+    <section class="section section--highlight">
+      <div class="section__content">
+        <h2>EcoBox: tu caja semanal de productos de temporada</h2>
+        <p>Recibe una selección de frutas y verduras frescas directamente de los campos canarios.</p>
+        <a href="ecobox.html" class="btn btn--primary">Ver opciones de EcoBox</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>EcoIsla Market</h3>
+        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <p>Email: info@ecoisla-market.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+      <div class="footer__col">
+        <h4>Síguenos</h4>
+        <p>Instagram · Facebook · X</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 EcoIsla Market. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
