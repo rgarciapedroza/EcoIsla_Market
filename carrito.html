@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carrito | EcoIsla Market</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
+  <script defer src="js/cart.js"></script>
+</head>
+<body>
+  <header class="header">  </header>
+
+  <main class="section">
+    <h2>Tu carrito</h2>
+    <div id="cartItems"></div>
+
+    <h3>Datos de envío</h3>
+    <form id="checkoutForm" class="form">
+      <label>
+        Nombre completo
+        <input type="text" name="nombre" required />
+      </label>
+      <label>
+        Dirección
+        <input type="text" name="direccion" required />
+      </label>
+      <label>
+        Email
+        <input type="email" name="email" required />
+      </label>
+      <button type="submit" class="btn btn--primary">Proceder al pago</button>
+    </form>
+  </main>
+</body>
+</html>
