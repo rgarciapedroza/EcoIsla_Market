@@ -9,28 +9,68 @@
   <script defer src="js/cart.js"></script>
 </head>
 <body>
-  <header class="header">  </header>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__logo">
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
+      <div>
+        <h1>EcoIsla Market</h1>
+        <p>Sabor local, raíz ecológica</p>
+      </div>
+    </div>
 
+    <nav class="nav">
+      <a href="index.html" class="nav__link">Inicio</a>
+      <a href="productos.html" class="nav__link">Productos</a>
+      <a href="ecobox.html" class="nav__link">EcoBox</a>
+      <a href="productores.html" class="nav__link">Productores</a>
+      <a href="contacto.html" class="nav__link">Contacto</a>
+      <a href="panel_productor.html" id="producerNav" class="nav__link" style="display: none;">
+        Área productor
+      </a>
+    </nav>
+
+    <div class="header__cart">
+      <span id="userInfo" class="header__user"></span>
+      <button id="loginBtn" class="header__auth-btn" type="button">Iniciar sesión</button>
+      <button id="logoutBtn" class="header__auth-btn" type="button" style="display: none;">Cerrar sesión</button>
+      <a href="carrito.html" id="cartCount">Carrito (0)</a>
+    </div>
+
+    <button class="nav__toggle" id="navToggle">☰</button>
+  </header>
+
+  <!-- MAIN -->
   <main class="section">
     <h2>Tu carrito</h2>
     <div id="cartItems"></div>
 
-    <h3>Datos de envío</h3>
-    <form id="checkoutForm" class="form">
-      <label>
-        Nombre completo
-        <input type="text" name="nombre" required />
-      </label>
-      <label>
-        Dirección
-        <input type="text" name="direccion" required />
-      </label>
-      <label>
-        Email
-        <input type="email" name="email" required />
-      </label>
-      <button type="submit" class="btn btn--primary">Proceder al pago</button>
-    </form>
+    <h3>Total</h3>
+    <p id="cartTotal">0 €</p>
+
+    <button id="confirmOrderBtn" class="btn btn--primary">Confirmar pedido</button>
   </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>EcoIsla Market</h3>
+        <p>Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero y comercio justo.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <p>Email: info@ecoisla-market.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+      <div class="footer__col">
+        <h4>Síguenos</h4>
+        <p>Instagram · Facebook · X</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 EcoIsla Market. Todos los derechos reservados.</p>
+    </div>
+  </footer>
 </body>
 </html>

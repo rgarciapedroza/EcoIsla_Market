@@ -400,6 +400,54 @@
     font-size: 0.85rem;
     color: #aaa;
   }
+
+  /* LISTA DEL CARRITO */
+.cart-list {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
+}
+
+.cart-item__img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+}
+
+.cart-item span {
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.cart-item span:last-child {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+#cartTotal {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-top: 1rem;
+}
+
+#confirmOrderBtn {
+  margin-top: 1.5rem;
+  display: inline-block;
+}
+
   
   /* RESPONSIVE */
   @media (max-width: 768px) {

@@ -1,32 +1,41 @@
-// cart.js
 document.addEventListener("DOMContentLoaded", () => {
   const cartItemsEl = document.getElementById("cartItems");
-  const form = document.getElementById("checkoutForm");
+  const cartTotalEl = document.getElementById("cartTotal");
+  const confirmBtn = document.getElementById("confirmOrderBtn");
 
-  const cart = loadCart(); 
+  const cart = loadCart();
+
   if (cart.length === 0) {
     cartItemsEl.innerHTML = "<p>Tu carrito está vacío.</p>";
-  } else {
-    cartItemsEl.innerHTML = `
-      <ul>
-        ${cart.map(item => `<li>${item.name}</li>`).join("")}
-      </ul>
-    `;
+    cartTotalEl.textContent = "0 €";
+    confirmBtn.style.display = "none";
+    return;
   }
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const nombre = form.nombre.value.trim();
-    const direccion = form.direccion.value.trim();
-    const email = form.email.value.trim();
+  let total = 0;
+  cartItemsEl.innerHTML = `
+    <ul class="cart-list">
+      ${cart.map(item => {
+        const price = item.price || 0;
+        const qty = item.quantity || 1;
+        total += price * qty;
+        const img = item.imageUrl || "img/producto-generico.png";
+        return `
+          <li class="cart-item">
+            <img src="${img}" alt="${item.name}" class="cart-item__img"/>
+            <span>${item.name}</span>
+            <span>Cantidad: ${qty}</span>
+            <span>Subtotal: ${(price * qty).toFixed(2)} €</span>
+          </li>
+        `;
+      }).join("")}
+    </ul>
+  `;
 
-    if (!nombre || !direccion || !email) {
-      alert("Por favor, completa todos los campos.");
-      return;
-    }
+  cartTotalEl.textContent = `${total.toFixed(2)} €`;
 
-    localStorage.setItem("ecoisla_checkout", JSON.stringify({ nombre, direccion, email, cart }));
-
+  confirmBtn.addEventListener("click", () => {
+    alert("Pedido confirmado. ¡Gracias por tu compra!");
     window.location.href = "pago.html";
   });
 });
