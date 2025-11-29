@@ -436,6 +436,17 @@
   color: var(--color-primary);
 }
 
+.cart-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+
 #cartTotal {
   font-size: 1.2rem;
   font-weight: 700;

@@ -14,23 +14,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let total = 0;
   cartItemsEl.innerHTML = `
-    <ul class="cart-list">
-      ${cart.map(item => {
-        const price = item.price || 0;
-        const qty = item.quantity || 1;
-        total += price * qty;
-        const img = item.imageUrl || "img/producto-generico.png";
-        return `
-          <li class="cart-item">
-            <img src="${img}" alt="${item.name}" class="cart-item__img"/>
-            <span>${item.name}</span>
-            <span>Cantidad: ${qty}</span>
-            <span>Subtotal: ${(price * qty).toFixed(2)} €</span>
-          </li>
-        `;
-      }).join("")}
-    </ul>
-  `;
+  <div class="grid grid--productos">
+    ${cart.map(item => {
+      const qty = item.quantity || 1;
+      const price = item.price || 0;
+      const subtotal = price * qty;
+      return `
+        <article class="producto">
+          <img src="${item.imageUrl}" alt="${item.name}" />
+          <h3>${item.name}</h3>
+          <p>Cantidad: ${qty}</p>
+          <p class="producto__precio">Subtotal: ${subtotal.toFixed(2)} €</p>
+        </article>
+      `;
+    }).join("")}
+  </div>
+`;
+
 
   cartTotalEl.textContent = `${total.toFixed(2)} €`;
 
