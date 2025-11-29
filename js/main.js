@@ -245,22 +245,35 @@ function updateCartCount() {
   cartCountEl.textContent = `Carrito (${cart.length})`;
 }
 
-function addToCart(name) {
+function addToCart(name, price, img) {
   const user = getCurrentUser();
-
   if (!user) {
-    alert(
-      "Para poder añadir productos al carrito es necesario iniciar sesión o registrarse."
-    );
+    alert("Debes iniciar sesión para añadir productos al carrito.");
     return;
   }
 
   const cart = loadCart();
-  cart.push({ name, addedAt: new Date().toISOString() });
+  const existing = cart.find(item => item.name === name);
+
+  const numericPrice = parseFloat(price.toString().replace(",", "."));
+
+  if (existing) {
+    existing.quantity = (existing.quantity || 1) + 1;
+  } else {
+    cart.push({
+      name,
+      price: numericPrice,
+      imageUrl: img,
+      quantity: 1,
+      addedAt: new Date().toISOString()
+    });
+  }
+
   saveCart(cart);
   updateCartCount();
   alert(`Añadido al carrito: ${name}`);
 }
+
 
 function attachCartButtons() {
   const cartButtons = document.querySelectorAll(".add-to-cart");
@@ -268,8 +281,10 @@ function attachCartButtons() {
     if (btn.dataset.cartListenerAttached === "true") return;
 
     btn.addEventListener("click", () => {
-      const name = btn.getAttribute("data-name") || "Producto";
-      addToCart(name);
+      const name = btn.getAttribute("data-name");
+      const price = btn.getAttribute("data-price");
+      const img = btn.getAttribute("data-img");
+      addToCart(name, price, img);
     });
 
     btn.dataset.cartListenerAttached = "true";
