@@ -4,6 +4,14 @@ const API_URL = "http://localhost:3000";
 const USER_KEY = "ecoisla_user";
 const CART_PREFIX = "ecoisla_cart_";
 
+// Productor -> isla (para fijar el origen automáticamente)
+const PRODUCER_ISLANDS = {
+  "Finca La Vega": "Gran Canaria",
+  "AgroTierra Norte": "Tenerife",
+  "EcoPlatanera La Palma": "La Palma",
+  "Granja Costa Azul": "Fuerteventura",
+};
+
 // ======================
 //   USUARIO (login / registro / sesión)
 // ======================
@@ -295,7 +303,7 @@ function addToCart(product) {
 }
 
 // ======================
-//   MEJORAR TARJETAS: cantidad + unidad
+//   TARJETAS DE PRODUCTO: cantidad + unidad
 // ======================
 
 function enhanceProductCards() {
@@ -408,7 +416,9 @@ function attachCartButtons() {
 
         const qtyInput = card.querySelector(".producto__qty");
         if (qtyInput) {
-          const raw = parseFloat(qtyInput.value.replace(",", "."));
+          const raw = parseFloat(
+            String(qtyInput.value).replace(",", ".")
+          );
           if (!Number.isNaN(raw) && raw > 0) {
             quantity = raw;
           } else {
@@ -468,15 +478,33 @@ function setupFilters() {
 }
 
 // ======================
-//   PRODUCTOS DESDE BD
+//   PRODUCTOS DESDE BD + sincronizar catálogo fijo
 // ======================
 
+// ======================
+//   PRODUCTOS DESDE BD + sincronizar catálogo fijo
+// ======================
 async function loadProductsFromDb() {
   const gridStatic = document.getElementById("productsGridStatic");
-  const gridDb = document.getElementById("productsGridDb");
+  const gridDb = document.getElementById("productsGridDb"); // solo para vaciar
 
-  const targetGrid = gridStatic || gridDb;
-  if (!targetGrid) return;
+  if (!gridStatic && !gridDb) return;
+
+  // Vaciar la sección de abajo (ya no la usaremos)
+  if (gridDb) {
+    gridDb.innerHTML = "";
+  }
+
+  // Mapa: nombre en minúsculas -> tarjeta fija del catálogo superior
+  const staticCardsByName = new Map();
+  if (gridStatic) {
+    gridStatic.querySelectorAll(".producto").forEach((card) => {
+      const nameEl = card.querySelector("h3");
+      if (!nameEl) return;
+      const key = nameEl.textContent.trim().toLowerCase();
+      staticCardsByName.set(key, card);
+    });
+  }
 
   try {
     const res = await fetch(`${API_URL}/api/products`);
@@ -484,45 +512,9 @@ async function loadProductsFromDb() {
 
     if (!Array.isArray(products)) return;
 
-    if (!gridStatic && gridDb) {
-      gridDb.innerHTML = "";
-    }
-
-    const existingNames = new Set();
-    if (gridStatic) {
-      gridStatic.querySelectorAll(".producto h3").forEach((h3) => {
-        existingNames.add(h3.textContent.trim().toLowerCase());
-      });
-    }
-
-    if (products.length === 0 && !gridStatic && gridDb) {
-      gridDb.innerHTML = "<p>No hay productos registrados todavía.</p>";
-      return;
-    }
-
     products.forEach((p) => {
-      const nameLower = (p.name || "").trim().toLowerCase();
-      if (gridStatic && existingNames.has(nameLower)) {
-        return;
-      }
-
-      const article = document.createElement("article");
-      article.className = "producto";
-
-      article.dataset.origin = p.origin || "Canarias";
-      article.dataset.category = "Otros";
-      article.dataset.unit = p.unit || "unidad";
-      article.dataset.price = String(p.price);
-
-      const producerInfo = p.producerName
-        ? `<p><strong>Productor:</strong> ${p.producerName}</p>`
-        : "";
-
-      const imgSrc =
-        p.imageUrl && p.imageUrl.trim()
-          ? p.imageUrl
-          : "img/producto-generico.png";
-
+      const key = (p.name || "").trim().toLowerCase();
+      const origin = p.origin || "Canarias";
       const unit = p.unit || "unidad";
       const unitLabel =
         unit === "kg"
@@ -533,26 +525,91 @@ async function loadProductsFromDb() {
           ? "tarro"
           : "unidad";
 
-      article.innerHTML = `
-        <img src="${imgSrc}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <p>Origen: ${p.origin || "Canarias"}</p>
-        ${producerInfo}
-        <p class="producto__precio">${p.price.toFixed(
-          2
-        )} €/${unitLabel}</p>
-        <button class="btn btn--small add-to-cart" data-name="${p.name}">Añadir al carrito</button>
-      `;
+      const priceNum =
+        typeof p.price === "number"
+          ? p.price
+          : parseFloat(String(p.price).replace(",", ".")) || 0;
 
-      targetGrid.appendChild(article);
+      const imgSrc =
+        p.imageUrl && p.imageUrl.trim()
+          ? p.imageUrl
+          : "img/producto-generico.png";
+
+      // 1) Si ya existe una tarjeta fija con ese nombre, la ACTUALIZAMOS
+      if (staticCardsByName.has(key)) {
+        const card = staticCardsByName.get(key);
+
+        card.dataset.origin = origin;
+        card.dataset.unit = unit;
+        card.dataset.price = String(priceNum);
+
+        const paragraphs = card.querySelectorAll("p");
+        paragraphs.forEach((par) => {
+          const text = (par.textContent || "").trim();
+          if (text.startsWith("Origen:")) {
+            par.textContent = `Origen: ${origin}`;
+          } else if (text.startsWith("Productor:")) {
+            if (p.producerName) {
+              par.textContent = `Productor: ${p.producerName}`;
+            } else {
+              par.textContent = "";
+            }
+          }
+        });
+
+        const priceEl = card.querySelector(".producto__precio");
+        if (priceEl) {
+          priceEl.textContent = `${priceNum
+            .toFixed(2)
+            .replace(".", ",")} €/${unitLabel}`;
+        }
+
+        const imgEl = card.querySelector("img");
+        if (imgEl && p.imageUrl) {
+          imgEl.src = imgSrc;
+        }
+      } else {
+        // 2) Si NO existe tarjeta fija, lo añadimos TAMBIÉN AL GRID DE ARRIBA
+        if (!gridStatic) return;
+
+        const article = document.createElement("article");
+        article.className = "producto";
+
+        article.dataset.origin = origin;
+        // si quieres afinar, aquí podrías poner Verduras/Frutas según el nombre
+        article.dataset.category = "Otros";
+        article.dataset.unit = unit;
+        article.dataset.price = String(priceNum);
+
+        const producerInfo = p.producerName
+          ? `<p><strong>Productor:</strong> ${p.producerName}</p>`
+          : "";
+
+        article.innerHTML = `
+          <img src="${imgSrc}" alt="${p.name}" />
+          <h3>${p.name}</h3>
+          <p>Origen: ${origin}</p>
+          ${producerInfo}
+          <p class="producto__precio">${priceNum
+            .toFixed(2)
+            .replace(".", ",")} €/${unitLabel}</p>
+          <button class="btn btn--small add-to-cart" data-name="${p.name}">
+            Añadir al carrito
+          </button>
+        `;
+
+        gridStatic.appendChild(article);
+      }
     });
 
+    // Añadimos controles de cantidad + carrito a todo lo que haya ahora en el grid
     enhanceProductCards();
     attachCartButtons();
   } catch (err) {
     console.error("Error cargando productos desde BD", err);
   }
 }
+
 
 // ======================
 //   PANEL PRODUCTOR
@@ -573,6 +630,11 @@ async function loadAdminProducts() {
     const res = await fetch(
       `${API_URL}/api/products?producerId=${encodeURIComponent(user.id)}`
     );
+
+    if (!res.ok) {
+      throw new Error("Error HTTP " + res.status);
+    }
+
     const products = await res.json();
 
     if (!Array.isArray(products) || products.length === 0) {
@@ -583,6 +645,11 @@ async function loadAdminProducts() {
 
     const rows = products
       .map((p) => {
+        const priceNum =
+          typeof p.price === "number"
+            ? p.price
+            : parseFloat(String(p.price).replace(",", ".")) || 0;
+
         const unit = p.unit || "unidad";
         const unitLabel =
           unit === "kg"
@@ -597,7 +664,7 @@ async function loadAdminProducts() {
       <tr data-id="${p._id}">
         <td>${p.name}</td>
         <td>${p.origin || "-"}</td>
-        <td>${p.price.toFixed(2)} €/${unitLabel}</td>
+        <td>${priceNum.toFixed(2)} €/${unitLabel}</td>
         <td>
           <button class="btn btn--small btn-edit-product">Editar</button>
           <button class="btn btn--small btn-delete-product">Eliminar</button>
@@ -623,6 +690,7 @@ async function loadAdminProducts() {
       </table>
     `;
 
+    // Eliminar
     adminContainer
       .querySelectorAll(".btn-delete-product")
       .forEach((btn) => {
@@ -649,6 +717,7 @@ async function loadAdminProducts() {
         });
       });
 
+    // Editar (nombre, origen, precio)
     adminContainer.querySelectorAll(".btn-edit-product").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const tr = btn.closest("tr");
@@ -660,8 +729,16 @@ async function loadAdminProducts() {
         const currentName = nameCell.textContent;
         const currentOrigin =
           originCell.textContent === "-" ? "" : originCell.textContent;
+
         const currentPrice = parseFloat(
-          priceCell.textContent.replace("€", "").replace(",", ".")
+          priceCell.textContent
+            .replace("€", "")
+            .replace("/", "")
+            .replace("kg", "")
+            .replace("docena", "")
+            .replace("tarro", "")
+            .replace("unidad", "")
+            .replace(",", ".")
         );
 
         const newName = prompt("Nombre del producto:", currentName);
@@ -669,7 +746,9 @@ async function loadAdminProducts() {
         const newOrigin = prompt("Origen:", currentOrigin);
         const newPriceStr = prompt(
           "Precio (€):",
-          currentPrice.toString().replace(".", ",")
+          isNaN(currentPrice)
+            ? ""
+            : currentPrice.toString().replace(".", ",")
         );
         if (!newPriceStr) return;
         const newPrice = parseFloat(newPriceStr.replace(",", "."));
@@ -704,6 +783,8 @@ async function loadAdminProducts() {
     });
   } catch (err) {
     console.error("Error cargando productos para productor", err);
+    adminContainer.innerHTML =
+      "<p>Se ha producido un error cargando tus productos.</p>";
   }
 }
 
@@ -715,6 +796,14 @@ function setupProducerPanel() {
   const info = document.getElementById("producerPanelInfo");
   const form = document.getElementById("addProductForm");
   const adminContainer = document.getElementById("producerProductsAdmin");
+
+  const producerIslandInput = document.getElementById("producerIsland");
+  const originHiddenInput = document.getElementById("originInput");
+
+  const producerIsland =
+    user && PRODUCER_ISLANDS[user.name]
+      ? PRODUCER_ISLANDS[user.name]
+      : "Canarias";
 
   if (!user) {
     if (info) {
@@ -739,6 +828,13 @@ function setupProducerPanel() {
     return;
   }
 
+  if (producerIslandInput) {
+    producerIslandInput.value = producerIsland;
+  }
+  if (originHiddenInput) {
+    originHiddenInput.value = producerIsland;
+  }
+
   if (info) {
     info.textContent =
       "Desde aquí puedes gestionar los productos que tienes en venta en EcoIsla Market.";
@@ -753,6 +849,8 @@ function setupProducerPanel() {
       if (!user) return;
 
       const formData = new FormData(form);
+
+      formData.set("origin", producerIsland);
       formData.append("producerId", user.id);
       formData.append("producerName", user.name);
 
@@ -770,6 +868,13 @@ function setupProducerPanel() {
         }
 
         form.reset();
+        if (producerIslandInput) {
+          producerIslandInput.value = producerIsland;
+        }
+        if (originHiddenInput) {
+          originHiddenInput.value = producerIsland;
+        }
+
         await loadAdminProducts();
         await loadProductsFromDb();
       } catch (err) {
@@ -799,7 +904,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupUserHeader();
   updateCartCount();
 
-  // 🔹 Hacer siempre clicable el texto "Carrito (X)"
   const cartCountEl = document.getElementById("cartCount");
   if (cartCountEl) {
     cartCountEl.style.cursor = "pointer";

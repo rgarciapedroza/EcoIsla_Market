@@ -11,13 +11,12 @@ const multer = require("multer");
 const app = express();
 const PORT = 3000;
 
-// ===== MIDDLEWARES =====
+// ===== MIDDLEWARES GENERALES =====
 app.use(cors());
 app.use(express.json());
 
-// servir imágenes estáticas (productos)
+// servir imágenes estáticas (productos subidos)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/img", express.static(path.join(__dirname, "img")));
 
 // asegurarnos de que existe la carpeta uploads
 const uploadsDir = path.join(__dirname, "uploads");
@@ -44,9 +43,8 @@ const MONGO_URI = "mongodb://127.0.0.1:27017/ecoisla";
 
 mongoose
   .connect(MONGO_URI)
-  .then(async () => {
+  .then(() => {
     console.log("✅ Conectado a MongoDB (ecoisla)");
-    await seedInitialProducts(); // sembramos / sincronizamos productos base
   })
   .catch((err) => {
     console.error("❌ Error conectando a MongoDB:", err.message);
@@ -57,18 +55,16 @@ mongoose
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    origin: { type: String, default: "" },
+    origin: { type: String, default: "" }, // isla
     price: { type: Number, required: true },
-
-    // unidad de precio: unidad, kg, docena, tarro, etc.
-    unit: { type: String, default: "unidad" },
-
-    // productor asociado
+    unit: {
+      type: String,
+      enum: ["unidad", "kg", "docena", "tarro"],
+      default: "unidad",
+    },
     producerId: { type: String, default: null },
     producerName: { type: String, default: "" },
-
-    // ruta de imagen (puede ser /uploads/... o /img/...)
-    imageUrl: { type: String, default: "" },
+    imageUrl: { type: String, default: "" }, // ruta de imagen
   },
   { timestamps: true }
 );
@@ -89,120 +85,6 @@ const userSchema = new mongoose.Schema(
 
 const Product = mongoose.model("Product", productSchema);
 const User = mongoose.model("User", userSchema);
-
-// ===============================
-//   SEED: productos iniciales
-//   (sincroniza por nombre, con unit y productor)
-// ===============================
-async function seedInitialProducts() {
-  try {
-    const initialProducts = [
-      {
-        name: "Naranjas ecológicas",
-        origin: "Tenerife",
-        price: 2.5,
-        unit: "kg",
-        producerName: "AgroTierra Norte",
-        imageUrl: "/img/naranjas_ecologicas.png",
-      },
-      {
-        name: "Plátanos ecológicos",
-        origin: "La Palma",
-        price: 2.8,
-        unit: "kg",
-        producerName: "EcoPlatanera La Palma",
-        imageUrl: "/img/platanos_ecologicos.png",
-      },
-      {
-        name: "Tomates de rama",
-        origin: "Gran Canaria",
-        price: 3.1,
-        unit: "kg",
-        producerName: "Finca La Vega",
-        imageUrl: "/img/tomates_ecologicos.png",
-      },
-      {
-        name: "Lechuga ecológica",
-        origin: "Fuerteventura",
-        price: 1.7,
-        unit: "unidad",
-        producerName: "Finca La Vega",
-        imageUrl: "/img/lechuga_ecologica.png",
-      },
-      {
-        name: "Huevos ecológicos (docena)",
-        origin: "Gran Canaria",
-        price: 3.6,
-        unit: "docena",
-        producerName: "Granja Costa Azul",
-        imageUrl: "/img/huevos_ecologica.png",
-      },
-      {
-        name: "Miel de floración canaria",
-        origin: "La Palma",
-        price: 6.9,
-        unit: "tarro",
-        producerName: "AgroTierra Norte",
-        imageUrl: "/img/miel_ecologica.png",
-      },
-    ];
-
-    for (const prod of initialProducts) {
-      // si existe el productor, le asignamos su id
-      let producerId = null;
-      if (prod.producerName) {
-        const user = await User.findOne({ name: prod.producerName });
-        if (user) {
-          producerId = user._id.toString();
-        }
-      }
-
-      await Product.updateOne(
-        { name: prod.name }, // buscamos por nombre
-        {
-          $set: {
-            origin: prod.origin,
-            price: prod.price,
-            unit: prod.unit || "unidad",
-            producerName: prod.producerName,
-            producerId,
-            imageUrl: prod.imageUrl,
-          },
-        },
-        { upsert: true } // si no existe, lo crea
-      );
-
-      console.log(`🔁 Producto base sincronizado: ${prod.name}`);
-    }
-
-    console.log("✅ Productos iniciales sincronizados con la BD.");
-  } catch (err) {
-    console.error("❌ Error sincronizando productos iniciales:", err);
-  }
-}
-
-// ===============================
-//   Asignar productos a productor
-//   según producerName == user.name
-// ===============================
-async function assignProductsToProducer(user) {
-  if (user.role !== "producer") return;
-
-  try {
-    const result = await Product.updateMany(
-      { producerName: user.name },
-      {
-        producerId: user._id.toString(),
-        producerName: user.name,
-      }
-    );
-    console.log(
-      `🔗 Productos vinculados a productor ${user.name}: ${result.modifiedCount}`
-    );
-  } catch (err) {
-    console.error("❌ Error asignando productos a productor:", err);
-  }
-}
 
 // ===== RUTAS API =====
 
@@ -227,7 +109,7 @@ app.get("/api/products", async (req, res) => {
 // POST /api/products → crea producto (con imagen opcional)
 app.post("/api/products", upload.single("image"), async (req, res) => {
   try {
-    const { name, origin, price, producerId, producerName, unit } = req.body;
+    const { name, origin, price, unit, producerId, producerName } = req.body;
 
     if (!name || price == null) {
       return res
@@ -240,10 +122,15 @@ app.post("/api/products", upload.single("image"), async (req, res) => {
       imageUrl = `/uploads/${req.file.filename}`;
     }
 
+    const numericPrice = parseFloat(price);
+    if (Number.isNaN(numericPrice)) {
+      return res.status(400).json({ error: "Precio no válido" });
+    }
+
     const product = new Product({
       name,
       origin: origin || "",
-      price: parseFloat(price),
+      price: numericPrice,
       unit: unit || "unidad",
       producerId: producerId || null,
       producerName: producerName || "",
@@ -258,10 +145,10 @@ app.post("/api/products", upload.single("image"), async (req, res) => {
   }
 });
 
-// PUT /api/products/:id → editar producto (solo datos básicos)
+// PUT /api/products/:id → editar producto (nombre, origen, precio, unidad)
 app.put("/api/products/:id", async (req, res) => {
   try {
-    const { name, origin, price } = req.body;
+    const { name, origin, price, unit } = req.body;
 
     if (!name || price == null) {
       return res
@@ -269,9 +156,19 @@ app.put("/api/products/:id", async (req, res) => {
         .json({ error: "Nombre y precio son obligatorios" });
     }
 
+    const numericPrice = parseFloat(price);
+    if (Number.isNaN(numericPrice)) {
+      return res.status(400).json({ error: "Precio no válido" });
+    }
+
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
-      { name, origin: origin || "", price: parseFloat(price) },
+      {
+        name,
+        origin: origin || "",
+        price: numericPrice,
+        unit: unit || "unidad",
+      },
       { new: true }
     );
 
@@ -302,7 +199,7 @@ app.delete("/api/products/:id", async (req, res) => {
 
 // --- USUARIOS ---
 
-// GET /api/users → listar usuarios (para pruebas)
+// GET /api/users → listar usuarios (solo para pruebas)
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find().sort({ createdAt: -1 });
@@ -378,9 +275,6 @@ app.post("/api/login", async (req, res) => {
         .json({ error: "Email o contraseña incorrectos" });
     }
 
-    // vinculamos productos cuyo producerName coincide con el nombre del productor
-    await assignProductsToProducer(user);
-
     res.json({
       id: user._id,
       name: user.name,
@@ -393,7 +287,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// DELETE /api/users/:id → eliminar cuenta de usuario
+// DELETE /api/users/:id → eliminar cuenta de usuario (+ productos si es productor)
 app.delete("/api/users/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -412,6 +306,66 @@ app.delete("/api/users/:id", async (req, res) => {
   } catch (err) {
     console.error("❌ Error eliminando usuario:", err);
     res.status(500).json({ error: "Error eliminando usuario" });
+  }
+});
+
+// ===== ADMIN: corregir productos según productor / isla (se puede llamar una vez) =====
+app.post("/api/admin/fix-products-by-island", async (req, res) => {
+  try {
+    const assignments = [
+      {
+        name: "Naranjas ecológicas",
+        producerName: "AgroTierra Norte",
+        origin: "Tenerife",
+      },
+      {
+        name: "Plátanos ecológicos",
+        producerName: "EcoPlatanera La Palma",
+        origin: "La Palma",
+      },
+      {
+        name: "Tomates de rama",
+        producerName: "Finca La Vega",
+        origin: "Gran Canaria",
+      },
+      {
+        name: "Lechuga ecológica",
+        producerName: "Finca La Vega",
+        origin: "Gran Canaria",
+      },
+      {
+        name: "Huevos ecológicos (docena)",
+        producerName: "Granja Costa Azul",
+        origin: "Fuerteventura",
+      },
+      {
+        name: "Miel de floración canaria",
+        producerName: "EcoPlatanera La Palma",
+        origin: "La Palma",
+      },
+    ];
+
+    for (const a of assignments) {
+      const user = await User.findOne({ name: a.producerName });
+      if (!user) {
+        console.warn("No se encontró productor para", a.producerName);
+        continue;
+      }
+
+      await Product.updateMany(
+        { name: a.name },
+        {
+          producerId: user._id.toString(),
+          producerName: user.name,
+          origin: a.origin,
+        }
+      );
+    }
+
+    res.json({ ok: true, message: "Productos corregidos por isla/productor." });
+  } catch (err) {
+    console.error("Error corrigiendo productos:", err);
+    res.status(500).json({ error: "Error corrigiendo productos" });
   }
 });
 
