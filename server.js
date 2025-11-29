@@ -17,6 +17,7 @@ app.use(express.json());
 
 // servir imágenes estáticas (productos)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/img", express.static(path.join(__dirname, "img")));
 
 // asegurarnos de que existe la carpeta uploads
 const uploadsDir = path.join(__dirname, "uploads");
@@ -43,8 +44,9 @@ const MONGO_URI = "mongodb://127.0.0.1:27017/ecoisla";
 
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("✅ Conectado a MongoDB (ecoisla)");
+    await seedInitialProducts(); // sembramos / sincronizamos productos base
   })
   .catch((err) => {
     console.error("❌ Error conectando a MongoDB:", err.message);
@@ -57,9 +59,16 @@ const productSchema = new mongoose.Schema(
     name: { type: String, required: true },
     origin: { type: String, default: "" },
     price: { type: Number, required: true },
+
+    // unidad de precio: unidad, kg, docena, tarro, etc.
+    unit: { type: String, default: "unidad" },
+
+    // productor asociado
     producerId: { type: String, default: null },
     producerName: { type: String, default: "" },
-    imageUrl: { type: String, default: "" }, // ruta de imagen
+
+    // ruta de imagen (puede ser /uploads/... o /img/...)
+    imageUrl: { type: String, default: "" },
   },
   { timestamps: true }
 );
@@ -80,6 +89,120 @@ const userSchema = new mongoose.Schema(
 
 const Product = mongoose.model("Product", productSchema);
 const User = mongoose.model("User", userSchema);
+
+// ===============================
+//   SEED: productos iniciales
+//   (sincroniza por nombre, con unit y productor)
+// ===============================
+async function seedInitialProducts() {
+  try {
+    const initialProducts = [
+      {
+        name: "Naranjas ecológicas",
+        origin: "Tenerife",
+        price: 2.5,
+        unit: "kg",
+        producerName: "AgroTierra Norte",
+        imageUrl: "/img/naranjas_ecologicas.png",
+      },
+      {
+        name: "Plátanos ecológicos",
+        origin: "La Palma",
+        price: 2.8,
+        unit: "kg",
+        producerName: "EcoPlatanera La Palma",
+        imageUrl: "/img/platanos_ecologicos.png",
+      },
+      {
+        name: "Tomates de rama",
+        origin: "Gran Canaria",
+        price: 3.1,
+        unit: "kg",
+        producerName: "Finca La Vega",
+        imageUrl: "/img/tomates_ecologicos.png",
+      },
+      {
+        name: "Lechuga ecológica",
+        origin: "Fuerteventura",
+        price: 1.7,
+        unit: "unidad",
+        producerName: "Finca La Vega",
+        imageUrl: "/img/lechuga_ecologica.png",
+      },
+      {
+        name: "Huevos ecológicos (docena)",
+        origin: "Gran Canaria",
+        price: 3.6,
+        unit: "docena",
+        producerName: "Granja Costa Azul",
+        imageUrl: "/img/huevos_ecologica.png",
+      },
+      {
+        name: "Miel de floración canaria",
+        origin: "La Palma",
+        price: 6.9,
+        unit: "tarro",
+        producerName: "AgroTierra Norte",
+        imageUrl: "/img/miel_ecologica.png",
+      },
+    ];
+
+    for (const prod of initialProducts) {
+      // si existe el productor, le asignamos su id
+      let producerId = null;
+      if (prod.producerName) {
+        const user = await User.findOne({ name: prod.producerName });
+        if (user) {
+          producerId = user._id.toString();
+        }
+      }
+
+      await Product.updateOne(
+        { name: prod.name }, // buscamos por nombre
+        {
+          $set: {
+            origin: prod.origin,
+            price: prod.price,
+            unit: prod.unit || "unidad",
+            producerName: prod.producerName,
+            producerId,
+            imageUrl: prod.imageUrl,
+          },
+        },
+        { upsert: true } // si no existe, lo crea
+      );
+
+      console.log(`🔁 Producto base sincronizado: ${prod.name}`);
+    }
+
+    console.log("✅ Productos iniciales sincronizados con la BD.");
+  } catch (err) {
+    console.error("❌ Error sincronizando productos iniciales:", err);
+  }
+}
+
+// ===============================
+//   Asignar productos a productor
+//   según producerName == user.name
+// ===============================
+async function assignProductsToProducer(user) {
+  if (user.role !== "producer") return;
+
+  try {
+    const result = await Product.updateMany(
+      { producerName: user.name },
+      {
+        producerId: user._id.toString(),
+        producerName: user.name,
+      }
+    );
+    console.log(
+      `🔗 Productos vinculados a productor ${user.name}: ${result.modifiedCount}`
+    );
+  } catch (err) {
+    console.error("❌ Error asignando productos a productor:", err);
+  }
+}
 
 // ===== RUTAS API =====
 
@@ -104,7 +227,7 @@ app.get("/api/products", async (req, res) => {
 // POST /api/products → crea producto (con imagen opcional)
 app.post("/api/products", upload.single("image"), async (req, res) => {
   try {
-    const { name, origin, price, producerId, producerName } = req.body;
+    const { name, origin, price, producerId, producerName, unit } = req.body;
 
     if (!name || price == null) {
       return res
@@ -121,6 +244,7 @@ app.post("/api/products", upload.single("image"), async (req, res) => {
       name,
       origin: origin || "",
       price: parseFloat(price),
+      unit: unit || "unidad",
       producerId: producerId || null,
       producerName: producerName || "",
       imageUrl,
@@ -253,6 +377,9 @@ app.post("/api/login", async (req, res) => {
         .status(400)
         .json({ error: "Email o contraseña incorrectos" });
     }
+
+    // vinculamos productos cuyo producerName coincide con el nombre del productor
+    await assignProductsToProducer(user);
 
     res.json({
       id: user._id,

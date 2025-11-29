@@ -2,16 +2,158 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Confirmar pago | EcoIsla Market</title>
+  <title>Pago | EcoIsla Market</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/main.js"></script>
   <script defer src="js/pago.js"></script>
 </head>
 <body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__logo">
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
+      <div>
+        <h1>EcoIsla Market</h1>
+        <p>Sabor local, raíz ecológica</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html" class="nav__link">Inicio</a>
+      <a href="productos.html" class="nav__link">Productos</a>
+      <a href="ecobox.html" class="nav__link">EcoBox</a>
+      <a href="productores.html" class="nav__link">Productores</a>
+      <a href="contacto.html" class="nav__link">Contacto</a>
+      <a
+        href="panel_productor.html"
+        id="producerNav"
+        class="nav__link"
+        style="display: none;"
+      >
+        Área productor
+      </a>
+    </nav>
+
+    <div class="header__cart">
+      <span id="userInfo" class="header__user"></span>
+
+      <button id="loginBtn" class="header__auth-btn" type="button">
+        Iniciar sesión
+      </button>
+
+      <button
+        id="logoutBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none;"
+      >
+        Cerrar sesión
+      </button>
+
+      <button
+        id="deleteAccountBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none; color: #ff5555;"
+      >
+        Eliminar cuenta
+      </button>
+
+      <span id="cartCount">Carrito (0)</span>
+    </div>
+
+    <button class="nav__toggle" id="navToggle">☰</button>
+  </header>
+
+  <!-- MAIN -->
   <main class="section">
-    <h2>Confirmación de pedido</h2>
-    <div id="checkoutSummary"></div>
-    <button id="finalizeBtn" class="btn btn--primary">Finalizar pago</button>
+    <div class="section__header">
+      <h2>Pasarela de pago</h2>
+      <p>Revisa tus datos y completa el pago de tu pedido.</p>
+    </div>
+
+    <div class="pago-resumen">
+      <h3>Resumen del pedido</h3>
+      <p>Total a pagar: <strong id="paymentTotal">0.00 €</strong></p>
+    </div>
+
+    <form id="paymentForm" class="form">
+      <h3>Datos de la tarjeta</h3>
+
+      <div id="paymentError" class="form__error" style="color:#d33; margin-bottom:1rem;"></div>
+
+      <label>
+        Titular de la tarjeta
+        <input type="text" name="cardName" required />
+      </label>
+
+      <label>
+        Número de tarjeta
+        <input
+          type="text"
+          name="cardNumber"
+          maxlength="19"
+          placeholder="1234 5678 9012 3456"
+          inputmode="numeric"
+          required
+        />
+        <small>Debe contener 16 dígitos (puedes escribirlos con o sin espacios).</small>
+      </label>
+
+      <div class="pago-row">
+        <label>
+          Caducidad (MM/AA)
+          <input
+            type="text"
+            name="cardExpiry"
+            placeholder="08/27"
+            maxlength="5"
+            required
+          />
+        </label>
+
+        <label>
+          CVV
+          <input
+            type="password"
+            name="cardCvv"
+            maxlength="3"
+            inputmode="numeric"
+            required
+          />
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn--primary" style="margin-top:1rem;">
+        Pagar ahora
+      </button>
+    </form>
   </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h3>EcoIsla Market</h3>
+        <p>
+          Cooperativa agrícola canaria. Productos ecológicos, de kilómetro cero
+          y comercio justo.
+        </p>
+      </div>
+      <div class="footer__col">
+        <h4>Contacto</h4>
+        <p>Email: info@ecoisla-market.com</p>
+        <p>Teléfono: +34 600 000 000</p>
+      </div>
+      <div class="footer__col">
+        <h4>Síguenos</h4>
+        <p>Instagram · Facebook · X</p>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2025 EcoIsla Market. Todos los derechos reservados.</p>
+    </div>
+  </footer>
 </body>
 </html>

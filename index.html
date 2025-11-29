@@ -36,9 +36,11 @@
 
     <div class="header__cart">
       <span id="userInfo" class="header__user"></span>
+    
       <button id="loginBtn" class="header__auth-btn" type="button">
         Iniciar sesión
       </button>
+    
       <button
         id="logoutBtn"
         class="header__auth-btn"
@@ -47,8 +49,19 @@
       >
         Cerrar sesión
       </button>
-      <a href="carrito.html" id="cartCount">Carrito (0)</a>
+    
+      <button
+        id="deleteAccountBtn"
+        class="header__auth-btn"
+        type="button"
+        style="display: none; color: #ff5555;"
+      >
+        Eliminar cuenta
+      </button>
+    
+      <span id="cartCount">Carrito (0)</span>
     </div>
+    
 
     <button class="nav__toggle" id="navToggle">☰</button>
   </header>
@@ -69,7 +82,7 @@
     </div>
 
     <div class="hero__image">
-      <img src="img/hero-ecoisla.jpg" alt="Cesta de productos ecológicos canarios" />
+      <img src="img/logo-ecoisla.png" alt="Logo EcoIsla" />
     </div>
   </section>
 

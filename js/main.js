@@ -1,4 +1,4 @@
-// main.js
+// js/main.js
 
 const API_URL = "http://localhost:3000";
 const USER_KEY = "ecoisla_user";
@@ -242,38 +242,145 @@ function updateCartCount() {
   }
 
   const cart = loadCart();
-  cartCountEl.textContent = `Carrito (${cart.length})`;
+  const total = cart.reduce(
+    (sum, item) => sum + (item.quantity || 1),
+    0
+  );
+  cartCountEl.textContent = `Carrito (${total})`;
 }
 
-function addToCart(name, price, img) {
+// product: { name, price, unit, quantity, imageUrl }
+function addToCart(product) {
   const user = getCurrentUser();
+
   if (!user) {
-    alert("Debes iniciar sesión para añadir productos al carrito.");
+    alert(
+      "Para poder añadir productos al carrito es necesario iniciar sesión o registrarse."
+    );
     return;
   }
 
-  const cart = loadCart();
-  const existing = cart.find(item => item.name === name);
+  const { name, price, unit, quantity, imageUrl } = product;
+  const qty = quantity && quantity > 0 ? quantity : 1;
 
-  const numericPrice = parseFloat(price.toString().replace(",", "."));
+  const cart = loadCart();
+  const existing = cart.find(
+    (item) =>
+      item.name === name &&
+      (item.unit || "unidad") === (unit || "unidad")
+  );
 
   if (existing) {
-    existing.quantity = (existing.quantity || 1) + 1;
+    existing.quantity = (existing.quantity || 1) + qty;
+    if (!existing.imageUrl && imageUrl) {
+      existing.imageUrl = imageUrl;
+    }
   } else {
     cart.push({
       name,
-      price: numericPrice,
-      imageUrl: img,
-      quantity: 1,
-      addedAt: new Date().toISOString()
+      price: price || 0,
+      unit: unit || "unidad",
+      quantity: qty,
+      imageUrl: imageUrl || "",
+      addedAt: new Date().toISOString(),
     });
   }
 
   saveCart(cart);
   updateCartCount();
-  alert(`Añadido al carrito: ${name}`);
+
+  const unitText =
+    unit === "kg" ? "kg" : unit === "docena" ? "docenas" : "unid.";
+  alert(`Añadido al carrito: ${name} (${qty} ${unitText})`);
 }
 
+// ======================
+//   MEJORAR TARJETAS: cantidad + unidad
+// ======================
+
+function enhanceProductCards() {
+  const cards = document.querySelectorAll(".producto");
+  cards.forEach((card) => {
+    if (card.dataset.qtyEnhanced === "true") return;
+
+    const btn = card.querySelector(".add-to-cart");
+    if (!btn) return;
+
+    // --- averiguar precio y unidad ---
+    const priceEl = card.querySelector(".producto__precio");
+    let unit = card.dataset.unit || "";
+    let price = card.dataset.price
+      ? parseFloat(card.dataset.price)
+      : NaN;
+
+    if ((!unit || Number.isNaN(price)) && priceEl) {
+      const text = priceEl.textContent || "";
+
+      if (text.includes("/kg") || text.toLowerCase().includes("€/kg")) {
+        unit = "kg";
+      } else if (text.includes("/docena")) {
+        unit = "docena";
+      } else if (text.includes("/tarro")) {
+        unit = "tarro";
+      } else {
+        unit = "unidad";
+      }
+
+      const numMatch = text.match(/[\d.,]+/);
+      if (numMatch) {
+        price = parseFloat(numMatch[0].replace(",", "."));
+      }
+    }
+
+    if (!unit) unit = "unidad";
+    if (!price || Number.isNaN(price)) price = 0;
+
+    card.dataset.unit = unit;
+    card.dataset.price = String(price);
+
+    // --- crear input de cantidad ---
+    const wrapper = document.createElement("div");
+    wrapper.className = "producto__cantidad-wrapper";
+
+    const label = document.createElement("label");
+    label.className = "producto__cantidad-label";
+    label.textContent = "Cantidad ";
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.className = "producto__qty";
+
+    if (unit === "kg") {
+      input.min = "0.1";
+      input.step = "0.1";
+      input.value = "1";
+    } else {
+      input.min = "1";
+      input.step = "1";
+      input.value = "1";
+    }
+
+    const span = document.createElement("span");
+    span.className = "producto__unidad-text";
+    span.textContent =
+      unit === "kg"
+        ? "kg"
+        : unit === "docena"
+        ? "docenas"
+        : unit === "tarro"
+        ? "tarros"
+        : "unid.";
+
+    label.appendChild(input);
+    label.appendChild(span);
+    wrapper.appendChild(label);
+
+    // lo metemos justo antes del botón
+    btn.parentNode.insertBefore(wrapper, btn);
+
+    card.dataset.qtyEnhanced = "true";
+  });
+}
 
 function attachCartButtons() {
   const cartButtons = document.querySelectorAll(".add-to-cart");
@@ -281,10 +388,44 @@ function attachCartButtons() {
     if (btn.dataset.cartListenerAttached === "true") return;
 
     btn.addEventListener("click", () => {
-      const name = btn.getAttribute("data-name");
-      const price = btn.getAttribute("data-price");
-      const img = btn.getAttribute("data-img");
-      addToCart(name, price, img);
+      const card = btn.closest(".producto");
+
+      const name =
+        btn.getAttribute("data-name") ||
+        (card && card.querySelector("h3")
+          ? card.querySelector("h3").textContent
+          : "Producto");
+
+      let unit = "unidad";
+      let price = 0;
+      let quantity = 1;
+
+      if (card) {
+        unit = card.dataset.unit || "unidad";
+        price = card.dataset.price
+          ? parseFloat(card.dataset.price)
+          : 0;
+
+        const qtyInput = card.querySelector(".producto__qty");
+        if (qtyInput) {
+          const raw = parseFloat(qtyInput.value.replace(",", "."));
+          if (!Number.isNaN(raw) && raw > 0) {
+            quantity = raw;
+          } else {
+            quantity = unit === "kg" ? 0.1 : 1;
+          }
+        }
+      }
+
+      let imageUrl = "";
+      if (card) {
+        const imgEl = card.querySelector("img");
+        if (imgEl) {
+          imageUrl = imgEl.getAttribute("src") || "";
+        }
+      }
+
+      addToCart({ name, price, unit, quantity, imageUrl });
     });
 
     btn.dataset.cartListenerAttached = "true";
@@ -327,12 +468,15 @@ function setupFilters() {
 }
 
 // ======================
-//   PRODUCTOS DESDE BD (vista pública)
+//   PRODUCTOS DESDE BD
 // ======================
 
 async function loadProductsFromDb() {
-  const grid = document.getElementById("productsGridDb");
-  if (!grid) return;
+  const gridStatic = document.getElementById("productsGridStatic");
+  const gridDb = document.getElementById("productsGridDb");
+
+  const targetGrid = gridStatic || gridDb;
+  if (!targetGrid) return;
 
   try {
     const res = await fetch(`${API_URL}/api/products`);
@@ -340,37 +484,70 @@ async function loadProductsFromDb() {
 
     if (!Array.isArray(products)) return;
 
-    grid.innerHTML = "";
+    if (!gridStatic && gridDb) {
+      gridDb.innerHTML = "";
+    }
 
-    if (products.length === 0) {
-      grid.innerHTML = "<p>No hay productos registrados todavía.</p>";
+    const existingNames = new Set();
+    if (gridStatic) {
+      gridStatic.querySelectorAll(".producto h3").forEach((h3) => {
+        existingNames.add(h3.textContent.trim().toLowerCase());
+      });
+    }
+
+    if (products.length === 0 && !gridStatic && gridDb) {
+      gridDb.innerHTML = "<p>No hay productos registrados todavía.</p>";
       return;
     }
 
     products.forEach((p) => {
+      const nameLower = (p.name || "").trim().toLowerCase();
+      if (gridStatic && existingNames.has(nameLower)) {
+        return;
+      }
+
       const article = document.createElement("article");
       article.className = "producto";
 
+      article.dataset.origin = p.origin || "Canarias";
+      article.dataset.category = "Otros";
+      article.dataset.unit = p.unit || "unidad";
+      article.dataset.price = String(p.price);
+
       const producerInfo = p.producerName
-        ? `<p>Productor: ${p.producerName}</p>`
+        ? `<p><strong>Productor:</strong> ${p.producerName}</p>`
         : "";
 
-      const imgSrc = p.imageUrl && p.imageUrl.trim()
-        ? p.imageUrl
-        : "img/producto-generico.png";
+      const imgSrc =
+        p.imageUrl && p.imageUrl.trim()
+          ? p.imageUrl
+          : "img/producto-generico.png";
+
+      const unit = p.unit || "unidad";
+      const unitLabel =
+        unit === "kg"
+          ? "kg"
+          : unit === "docena"
+          ? "docena"
+          : unit === "tarro"
+          ? "tarro"
+          : "unidad";
 
       article.innerHTML = `
         <img src="${imgSrc}" alt="${p.name}" />
         <h3>${p.name}</h3>
         <p>Origen: ${p.origin || "Canarias"}</p>
         ${producerInfo}
-        <p class="producto__precio">${p.price.toFixed(2)} €/unidad</p>
+        <p class="producto__precio">${p.price.toFixed(
+          2
+        )} €/${unitLabel}</p>
         <button class="btn btn--small add-to-cart" data-name="${p.name}">Añadir al carrito</button>
       `;
 
-      grid.appendChild(article);
+      targetGrid.appendChild(article);
     });
 
+    enhanceProductCards();
     attachCartButtons();
   } catch (err) {
     console.error("Error cargando productos desde BD", err);
@@ -405,19 +582,29 @@ async function loadAdminProducts() {
     }
 
     const rows = products
-      .map(
-        (p) => `
+      .map((p) => {
+        const unit = p.unit || "unidad";
+        const unitLabel =
+          unit === "kg"
+            ? "kg"
+            : unit === "docena"
+            ? "docena"
+            : unit === "tarro"
+            ? "tarro"
+            : "unidad";
+
+        return `
       <tr data-id="${p._id}">
         <td>${p.name}</td>
         <td>${p.origin || "-"}</td>
-        <td>${p.price.toFixed(2)} €</td>
+        <td>${p.price.toFixed(2)} €/${unitLabel}</td>
         <td>
           <button class="btn btn--small btn-edit-product">Editar</button>
           <button class="btn btn--small btn-delete-product">Eliminar</button>
         </td>
       </tr>
-    `
-      )
+    `;
+      })
       .join("");
 
     adminContainer.innerHTML = `
@@ -436,7 +623,6 @@ async function loadAdminProducts() {
       </table>
     `;
 
-    // Eliminar
     adminContainer
       .querySelectorAll(".btn-delete-product")
       .forEach((btn) => {
@@ -463,7 +649,6 @@ async function loadAdminProducts() {
         });
       });
 
-    // Editar
     adminContainer.querySelectorAll(".btn-edit-product").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const tr = btn.closest("tr");
@@ -549,7 +734,8 @@ function setupProducerPanel() {
     }
     if (form) form.style.display = "none";
     if (adminContainer)
-      adminContainer.innerHTML = "<p>No tienes permisos para esta sección.</p>";
+      adminContainer.innerHTML =
+        "<p>No tienes permisos para esta sección.</p>";
     return;
   }
 
@@ -612,6 +798,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupUserHeader();
   updateCartCount();
+
+  // 🔹 Hacer siempre clicable el texto "Carrito (X)"
+  const cartCountEl = document.getElementById("cartCount");
+  if (cartCountEl) {
+    cartCountEl.style.cursor = "pointer";
+    cartCountEl.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "carrito.html";
+    });
+  }
+
+  enhanceProductCards();
   attachCartButtons();
   setupFilters();
   loadProductsFromDb();
