@@ -4,6 +4,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
 
 const app = express();
 const PORT = 3000;
@@ -11,6 +14,29 @@ const PORT = 3000;
 // ===== MIDDLEWARES =====
 app.use(cors());
 app.use(express.json());
+
+// servir imágenes estáticas (productos)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// asegurarnos de que existe la carpeta uploads
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+// ===== MULTER (SUBIDA DE IMÁGENES) =====
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname) || ".jpg";
+    const base = path.basename(file.originalname, ext);
+    cb(null, `${base}-${Date.now()}${ext}`);
+  },
+});
+
+const upload = multer({ storage });
 
 // ===== CONEXIÓN A MONGODB =====
 const MONGO_URI = "mongodb://127.0.0.1:27017/ecoisla";
@@ -31,8 +57,9 @@ const productSchema = new mongoose.Schema(
     name: { type: String, required: true },
     origin: { type: String, default: "" },
     price: { type: Number, required: true },
-    producerId: { type: String, default: null },   // id del usuario productor
-    producerName: { type: String, default: "" },   // nombre visible en catálogo
+    producerId: { type: String, default: null },
+    producerName: { type: String, default: "" },
+    imageUrl: { type: String, default: "" }, // ruta de imagen
   },
   { timestamps: true }
 );
@@ -58,7 +85,7 @@ const User = mongoose.model("User", userSchema);
 
 // --- PRODUCTOS ---
 
-// GET /api/products → lista productos (todos o filtrados por productor)
+// GET /api/products → lista productos (todos o por productor)
 app.get("/api/products", async (req, res) => {
   try {
     const filter = {};
@@ -74,8 +101,8 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// POST /api/products → crea un producto
-app.post("/api/products", async (req, res) => {
+// POST /api/products → crea producto (con imagen opcional)
+app.post("/api/products", upload.single("image"), async (req, res) => {
   try {
     const { name, origin, price, producerId, producerName } = req.body;
 
@@ -85,12 +112,18 @@ app.post("/api/products", async (req, res) => {
         .json({ error: "Nombre y precio son obligatorios" });
     }
 
+    let imageUrl = "";
+    if (req.file) {
+      imageUrl = `/uploads/${req.file.filename}`;
+    }
+
     const product = new Product({
       name,
       origin: origin || "",
-      price,
+      price: parseFloat(price),
       producerId: producerId || null,
       producerName: producerName || "",
+      imageUrl,
     });
 
     const saved = await product.save();
@@ -101,7 +134,7 @@ app.post("/api/products", async (req, res) => {
   }
 });
 
-// PUT /api/products/:id → editar producto
+// PUT /api/products/:id → editar producto (solo datos básicos)
 app.put("/api/products/:id", async (req, res) => {
   try {
     const { name, origin, price } = req.body;
@@ -114,7 +147,7 @@ app.put("/api/products/:id", async (req, res) => {
 
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
-      { name, origin: origin || "", price },
+      { name, origin: origin || "", price: parseFloat(price) },
       { new: true }
     );
 
@@ -163,7 +196,7 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-// POST /api/users → registro (usuario o productor)
+// POST /api/users → registro
 app.post("/api/users", async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -202,7 +235,7 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
-// POST /api/login → login con email + contraseña
+// POST /api/login → login
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -230,6 +263,28 @@ app.post("/api/login", async (req, res) => {
   } catch (err) {
     console.error("Error en login:", err);
     res.status(500).json({ error: "Error interno" });
+  }
+});
+
+// DELETE /api/users/:id → eliminar cuenta de usuario
+app.delete("/api/users/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // si era productor, borramos también sus productos
+    if (deletedUser.role === "producer") {
+      await Product.deleteMany({ producerId: userId });
+    }
+
+    res.status(204).end();
+  } catch (err) {
+    console.error("❌ Error eliminando usuario:", err);
+    res.status(500).json({ error: "Error eliminando usuario" });
   }
 });
 

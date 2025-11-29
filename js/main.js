@@ -147,6 +147,7 @@ function setupUserHeader() {
   const userInfoEl = document.getElementById("userInfo");
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
+  const deleteAccountBtn = document.getElementById("deleteAccountBtn");
   const producerNav = document.getElementById("producerNav");
 
   if (userInfoEl) {
@@ -155,17 +156,46 @@ function setupUserHeader() {
 
   if (loginBtn) {
     loginBtn.style.display = user ? "none" : "";
-    loginBtn.addEventListener("click", () => {
+    loginBtn.onclick = () => {
       window.location.href = "login.html";
-    });
+    };
   }
 
   if (logoutBtn) {
     logoutBtn.style.display = user ? "" : "none";
-    logoutBtn.addEventListener("click", () => {
+    logoutBtn.onclick = () => {
       clearCurrentUser();
       window.location.reload();
-    });
+    };
+  }
+
+  if (deleteAccountBtn) {
+    deleteAccountBtn.style.display = user ? "" : "none";
+    deleteAccountBtn.onclick = async () => {
+      if (!user) return;
+      const confirmDelete = confirm(
+        "¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer."
+      );
+      if (!confirmDelete) return;
+
+      try {
+        const res = await fetch(`${API_URL}/api/users/${user.id}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok && res.status !== 204) {
+          alert("Hubo un error eliminando la cuenta");
+          return;
+        }
+
+        clearCurrentUser();
+        alert("Tu cuenta ha sido eliminada correctamente.");
+        window.location.href = "index.html";
+      } catch (err) {
+        console.error(err);
+        alert("Error de conexión al eliminar la cuenta.");
+      }
+    };
   }
 
   if (producerNav) {
@@ -247,7 +277,7 @@ function attachCartButtons() {
 }
 
 // ======================
-//   FILTRO PRODUCTOS FIJOS (catálogo estático)
+//   FILTRO PRODUCTOS FIJOS
 // ======================
 
 function setupFilters() {
@@ -333,7 +363,7 @@ async function loadProductsFromDb() {
 }
 
 // ======================
-//   PANEL PRODUCTOR (Área productor)
+//   PANEL PRODUCTOR
 // ======================
 
 async function loadAdminProducts() {
@@ -521,7 +551,6 @@ function setupProducerPanel() {
       const user = getCurrentUser();
       if (!user) return;
 
-      // FormData para poder incluir imagen
       const formData = new FormData(form);
       formData.append("producerId", user.id);
       formData.append("producerName", user.name);
@@ -529,7 +558,7 @@ function setupProducerPanel() {
       try {
         const res = await fetch(`${API_URL}/api/products`, {
           method: "POST",
-          body: formData, // NO poner Content-Type, lo añade el navegador
+          body: formData,
         });
 
         const data = await res.json();
