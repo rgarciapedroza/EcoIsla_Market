@@ -245,7 +245,10 @@ function updateCartCount() {
 
   const user = getCurrentUser();
   if (!user) {
-    cartCountEl.textContent = "Carrito (0)";
+    cartCountEl.innerHTML = `
+      <img src="img/cart.jpg" alt="Carrito" class="cart-icon" />
+      (0)
+    `;
     return;
   }
 
@@ -254,8 +257,13 @@ function updateCartCount() {
     (sum, item) => sum + (item.quantity || 1),
     0
   );
-  cartCountEl.textContent = `Carrito (${total})`;
+
+  cartCountEl.innerHTML = `
+    <img src="img/cart.jpg" alt="Carrito" class="cart-icon" />
+    (${total})
+  `;
 }
+
 
 // product: { name, price, unit, quantity, imageUrl }
 function addToCart(product) {

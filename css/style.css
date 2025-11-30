@@ -435,6 +435,25 @@
   font-weight: 600;
   color: var(--color-primary);
 }
+.cart-count-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; 
+}
+
+.cart-icon {
+  height: 18px;
+  width: 18px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.cart-count-number {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+}
+
 
 .cart-summary {
   display: flex;
