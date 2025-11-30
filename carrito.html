@@ -9,7 +9,6 @@
   <script defer src="js/cart.js"></script>
 </head>
 <body>
-  <!-- HEADER -->
   <header class="header">
     <div class="header__logo">
       <img src="img/logo-ecoisla.png" alt="Logo EcoIsla Market" />
@@ -34,24 +33,23 @@
       <span id="userInfo" class="header__user"></span>
       <button id="loginBtn" class="header__auth-btn" type="button">Iniciar sesión</button>
       <button id="logoutBtn" class="header__auth-btn" type="button" style="display: none;">Cerrar sesión</button>
-      <a href="carrito.html" id="cartCount">Carrito (0)</a>
+      <a href="carrito.html" id="cartCount" class="cart-count-content">
+        <img src="img/cart.jpg" alt="Carrito" class="cart-icon" />
+        <span class="cart-count-number">(0)</span>
+      </a>
     </div>
 
     <button class="nav__toggle" id="navToggle">☰</button>
   </header>
 
-  <!-- MAIN -->
   <main class="section">
     <h2>Tu carrito</h2>
-    <div id="cartItems"></div>
-
+    <div id="cartItems" class="carrito__container"></div>
     <h3>Total</h3>
     <p id="cartTotal">0 €</p>
-
     <button id="confirmOrderBtn" class="btn btn--primary">Confirmar pedido</button>
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__cols">
       <div class="footer__col">
