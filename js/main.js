@@ -264,15 +264,22 @@ function updateCartCount() {
   `;
 }
 
+  function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
+}
 
 // product: { name, price, unit, quantity, imageUrl }
 function addToCart(product) {
   const user = getCurrentUser();
 
   if (!user) {
-    alert(
-      "Para poder añadir productos al carrito es necesario iniciar sesión o registrarse."
-    );
+    showToast(`Añadido al carrito: ${item.name} (${item.quantity} ${item.unit})`);
     return;
   }
 
@@ -307,7 +314,7 @@ function addToCart(product) {
 
   const unitText =
     unit === "kg" ? "kg" : unit === "docena" ? "docenas" : "unid.";
-  alert(`Añadido al carrito: ${name} (${qty} ${unitText})`);
+ showToast(`Añadido al carrito: ${name} (${qty} ${unitText})`);
 }
 
 // ======================

@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!cartItemsEl || !cartTotalEl || !confirmBtn) return;
 
+
   function renderCart() {
     const cart = loadCart();
 

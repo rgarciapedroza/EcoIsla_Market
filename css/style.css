@@ -226,25 +226,55 @@
     margin-top: 0.6rem;
   }
   
-  /* PRODUCTOS */
-  .producto img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    margin-bottom: 0.6rem;
-  }
-  
-  .producto h3 {
-    margin: 0.3rem 0;
-  }
-  
-  .producto__precio {
-    font-weight: 700;
-    color: var(--color-primary);
-    margin: 0.4rem 0 0.6rem;
-  }
-  
+ /* ---- CANTIDAD + UNIDAD FULL REFINE ---- */
+.producto_qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f7f7f7;                 /* gris suave, contraste limpio */
+  padding: 0.45rem 0.75rem;
+  border-radius: 10px;
+  border: 1.5px solid #d6d6d6;
+  transition: 0.25s ease;
+  margin-top: 0.7rem;
+}
+
+/* hover */
+.producto_qty:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 6px rgba(46,125,50,0.2);
+  background: #fff;
+}
+
+/* INPUT — más grande, más legible, centrado */
+.producto_qty-input {
+  width: 60px;
+  height: 35px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: #222;
+}
+
+/* UNIDAD DE MEDIDA — limpia, negra y bien visible */
+.producto__unidad-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #000;
+  opacity: 0.9;
+  margin-left: 2px;
+}
+
+/* Botón separado visualmente pero sin mover nada estructural */
+.producto .btn {
+  margin-top: 0.7rem;
+}
+
+
+
   /* VALORES / LISTAS */
   .lista-valores {
     padding-left: 1.2rem;
@@ -312,6 +342,30 @@
   .contacto-info p {
     margin-top: 0.3rem;
   }
+
+  /* MESSAGE */ 
+  .toast {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%); /* pequeño desplazamiento hacia arriba */
+  background: #2e7d32; /* var(--color-primary) si prefieres */
+  color: #fff;
+  padding: 1rem 1.4rem;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 2000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, -50%); /* exactamente centrado */
+}
   
   /* BOTONES, LINKS */
   .btn {
