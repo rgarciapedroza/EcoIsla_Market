@@ -264,7 +264,7 @@ function updateCartCount() {
   `;
 }
 
-  function showToast(message) {
+function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
   toast.classList.add("show");
@@ -314,7 +314,7 @@ function addToCart(product) {
 
   const unitText =
     unit === "kg" ? "kg" : unit === "docena" ? "docenas" : "unid.";
- showToast(`Añadido al carrito: ${name} (${qty} ${unitText})`);
+  showToast(`Añadido al carrito: ${name} (${qty} ${unitText})`);
 }
 
 // ======================
@@ -496,9 +496,6 @@ function setupFilters() {
 //   PRODUCTOS DESDE BD + sincronizar catálogo fijo
 // ======================
 
-// ======================
-//   PRODUCTOS DESDE BD + sincronizar catálogo fijo
-// ======================
 async function loadProductsFromDb() {
   const gridStatic = document.getElementById("productsGridStatic");
   const gridDb = document.getElementById("productsGridDb"); // solo para vaciar
@@ -934,4 +931,16 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProductsFromDb();
   setupProducerPanel();
   setupAuthForms();
+
+  // ======================
+  //   FORMULARIO DE CONTACTO
+  // ======================
+  const contactForm = document.querySelector(".contacto-layout .form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Consulta enviada. Será respondida con la mayor brevedad.");
+      contactForm.reset();
+    });
+  }
 });
