@@ -1,0 +1,172 @@
+[
+    {
+      "_id": {
+        "$oid": "692b5855a21e56073bb80fe9"
+      },
+      "name": "Pepino",
+      "origin": "Gran Canaria",
+      "price": 0.75,
+      "producerId": "6929fc42a96e264c61cf2b1f",
+      "producerName": "Finca La Vega",
+      "imageUrl": "/uploads/Pepinos-2-838x1260-1764448341330.jpg",
+      "createdAt": {
+        "$date": "2025-11-29T20:32:21.334Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:00:21.613Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "692b6151e870edbf02beb953"
+      },
+      "name": "Naranjas ecológicas",
+      "origin": "Tenerife",
+      "price": 2.5,
+      "producerId": "6929fc42a96e264c61cf2b22",
+      "producerName": "AgroTierra Norte",
+      "imageUrl": "/img/naranjas_ecologicas.png",
+      "__v": 0,
+      "createdAt": {
+        "$date": "2025-11-29T21:10:41.413Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:20:13.627Z"
+      },
+      "unit": "kg"
+    },
+    {
+      "_id": {
+        "$oid": "692b6151e870edbf02beb954"
+      },
+      "name": "Plátanos ecológicos",
+      "origin": "La Palma",
+      "price": 2.8,
+      "producerId": "6929fc42a96e264c61cf2b25",
+      "producerName": "EcoPlatanera La Palma",
+      "imageUrl": "/img/platanos_ecologicos.png",
+      "__v": 0,
+      "createdAt": {
+        "$date": "2025-11-29T21:10:41.413Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:20:13.630Z"
+      },
+      "unit": "kg"
+    },
+    {
+      "_id": {
+        "$oid": "692b6151e870edbf02beb955"
+      },
+      "name": "Tomates de rama",
+      "origin": "Gran Canaria",
+      "price": 3.1,
+      "producerId": "6929fc42a96e264c61cf2b1f",
+      "producerName": "Finca La Vega",
+      "imageUrl": "/img/tomates_ecologicos.png",
+      "__v": 0,
+      "createdAt": {
+        "$date": "2025-11-29T21:10:41.413Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:20:13.631Z"
+      },
+      "unit": "kg"
+    },
+    {
+      "_id": {
+        "$oid": "692b6151e870edbf02beb956"
+      },
+      "name": "Lechuga ecológica",
+      "origin": "Gran Canaria",
+      "price": 1.7,
+      "producerId": "6929fc42a96e264c61cf2b1f",
+      "producerName": "Finca La Vega",
+      "imageUrl": "/img/lechuga_ecologica.png",
+      "__v": 0,
+      "createdAt": {
+        "$date": "2025-11-29T21:10:41.413Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:42:40.885Z"
+      },
+      "unit": "unidad"
+    },
+    {
+      "_id": {
+        "$oid": "692b6151e870edbf02beb957"
+      },
+      "name": "Huevos ecológicos (docena)",
+      "origin": "Fuerteventura",
+      "price": 3.6,
+      "producerId": "6929fc42a96e264c61cf2b28",
+      "producerName": "Granja Costa Azul",
+      "imageUrl": "/img/huevos_ecologica.png",
+      "__v": 0,
+      "createdAt": {
+        "$date": "2025-11-29T21:10:41.413Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:44:24.099Z"
+      },
+      "unit": "unidad"
+    },
+    {
+      "_id": {
+        "$oid": "692b6151e870edbf02beb958"
+      },
+      "name": "Miel de floración canaria",
+      "origin": "Tenerife",
+      "price": 6.9,
+      "producerId": "6929fc42a96e264c61cf2b22",
+      "producerName": "AgroTierra Norte",
+      "imageUrl": "/img/miel_ecologica.png",
+      "__v": 0,
+      "createdAt": {
+        "$date": "2025-11-29T21:10:41.413Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:29:45.180Z"
+      },
+      "unit": "unidad"
+    },
+    {
+      "_id": {
+        "$oid": "692b646f7d1478d12de1e117"
+      },
+      "name": "Zanahorias ecológicas",
+      "origin": "Gran Canaria",
+      "price": 2.5,
+      "unit": "kg",
+      "producerId": "6929fc42a96e264c61cf2b1f",
+      "producerName": "Finca La Vega",
+      "imageUrl": "/uploads/zanahorias-1764451439410.jpg",
+      "createdAt": {
+        "$date": "2025-11-29T21:23:59.418Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:00:21.613Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "692b797f127f01870fae9f0a"
+      },
+      "name": "Leche de vaca",
+      "origin": "Fuerteventura",
+      "price": 0.85,
+      "unit": "unidad",
+      "producerId": "6929fc42a96e264c61cf2b28",
+      "producerName": "Granja Costa Azul",
+      "imageUrl": "/uploads/leche de vaca canaria-1764456831450.png",
+      "createdAt": {
+        "$date": "2025-11-29T22:53:51.463Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T22:53:51.463Z"
+      },
+      "__v": 0
+    }
+  ]

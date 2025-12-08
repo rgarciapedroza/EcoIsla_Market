@@ -1,0 +1,98 @@
+[
+    {
+      "_id": {
+        "$oid": "6929fc42a96e264c61cf2b1f"
+      },
+      "name": "Finca La Vega",
+      "email": "finca.lavega@ecoisla.com",
+      "passwordHash": "$2b$10$DKDaPcs4t0P8V00mbdEHiujAqstoYlqXyXJlXnbA1cPxy8Zhm.vNm",
+      "role": "producer",
+      "createdAt": {
+        "$date": "2025-11-28T19:47:14.178Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-28T19:47:14.178Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "6929fc42a96e264c61cf2b22"
+      },
+      "name": "AgroTierra Norte",
+      "email": "agrotierra.norte@ecoisla.com",
+      "passwordHash": "$2b$10$f2gv52x3V1BCoGleK0tycuz4tQmA3ZCBW4R3eicX3gflxRRGZj1qi",
+      "role": "producer",
+      "createdAt": {
+        "$date": "2025-11-28T19:47:14.238Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-28T19:47:14.238Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "6929fc42a96e264c61cf2b25"
+      },
+      "name": "EcoPlatanera La Palma",
+      "email": "ecoplatanera.palma@ecoisla.com",
+      "passwordHash": "$2b$10$0/jdcF1MiiLNIKBsA.T/8.4qXMKV7wxzEo3DlyOow5/VxNefAL8Ra",
+      "role": "producer",
+      "createdAt": {
+        "$date": "2025-11-28T19:47:14.295Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-28T19:47:14.295Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "6929fc42a96e264c61cf2b28"
+      },
+      "name": "Granja Costa Azul",
+      "email": "granja.costaazul@ecoisla.com",
+      "passwordHash": "$2b$10$52GSFXwsCHatg0y.M3ZcweVVPZUq2yELati4XYQmm9GO0A.l.xR3i",
+      "role": "producer",
+      "createdAt": {
+        "$date": "2025-11-28T19:47:14.353Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-28T19:47:14.353Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "692b5430a21e56073bb80fdd"
+      },
+      "name": "Paola Viera",
+      "email": "paolaviera@gmail.com",
+      "passwordHash": "$2b$10$LGkrZZdV1RkYZKj3U7/Ct.ieIuUXqINfAX598KSTUuxDHMm77bUu6",
+      "role": "user",
+      "createdAt": {
+        "$date": "2025-11-29T20:14:40.154Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-29T20:14:40.154Z"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "6935ef02dd6877463ecaa8b0"
+      },
+      "name": "Rosmary Garcia",
+      "email": "rosmarygarcia@gmail.com",
+      "passwordHash": "$2b$10$SDNHvgfGZeTtPbNc4Qa1duaCerFx.1J39TlWPH1FANx/4Ffdp7qyy",
+      "role": "user",
+      "createdAt": {
+        "$date": "2025-12-07T21:17:54.117Z"
+      },
+      "updatedAt": {
+        "$date": "2025-12-07T21:17:54.117Z"
+      },
+      "__v": 0
+    }
+  ]
