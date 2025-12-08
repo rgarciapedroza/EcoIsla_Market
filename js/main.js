@@ -279,7 +279,8 @@ function addToCart(product) {
   const user = getCurrentUser();
 
   if (!user) {
-    showToast(`Añadido al carrito: ${item.name} (${item.quantity} ${item.unit})`);
+    // Nota: si quisieras bloquear el carrito sin login, aquí podrías redirigir
+    showToast("Debes iniciar sesión para usar el carrito.");
     return;
   }
 
@@ -622,7 +623,6 @@ async function loadProductsFromDb() {
   }
 }
 
-
 // ======================
 //   PANEL PRODUCTOR
 // ======================
@@ -729,18 +729,15 @@ async function loadAdminProducts() {
         });
       });
 
-    // Editar (nombre, origen, precio)
+    // Editar (solo nombre y precio; origen NO se toca)
     adminContainer.querySelectorAll(".btn-edit-product").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const tr = btn.closest("tr");
         const id = tr.dataset.id;
         const nameCell = tr.children[0];
-        const originCell = tr.children[1];
         const priceCell = tr.children[2];
 
         const currentName = nameCell.textContent;
-        const currentOrigin =
-          originCell.textContent === "-" ? "" : originCell.textContent;
 
         const currentPrice = parseFloat(
           priceCell.textContent
@@ -755,7 +752,7 @@ async function loadAdminProducts() {
 
         const newName = prompt("Nombre del producto:", currentName);
         if (!newName) return;
-        const newOrigin = prompt("Origen:", currentOrigin);
+
         const newPriceStr = prompt(
           "Precio (€):",
           isNaN(currentPrice)
@@ -775,7 +772,6 @@ async function loadAdminProducts() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               name: newName,
-              origin: newOrigin,
               price: newPrice,
             }),
           });

@@ -38,16 +38,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ===== CONEXIÓN A MONGODB =====
-const MONGO_URI = "mongodb://127.0.0.1:27017/ecoisla";
+// ===== CONEXIÓN A MONGODB ATLAS =====
+const MONGO_URI =
+  "mongodb+srv://paolavierasuarez_db_user:0cJzBnuPUoI5neNJ@ecoislamarket.sagvauj.mongodb.net/ecoisla_market?retryWrites=true&w=majority";
 
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log("✅ Conectado a MongoDB (ecoisla)");
+    console.log("✅ Conectado a MongoDB Atlas (ecoisla_market)");
   })
   .catch((err) => {
-    console.error("❌ Error conectando a MongoDB:", err.message);
+    console.error("❌ Error conectando a MongoDB Atlas:", err.message);
   });
 
 // ===== ESQUEMAS Y MODELOS =====
@@ -145,10 +146,10 @@ app.post("/api/products", upload.single("image"), async (req, res) => {
   }
 });
 
-// PUT /api/products/:id → editar producto (nombre, origen, precio, unidad)
+// PUT /api/products/:id → editar producto (NO cambia origin)
 app.put("/api/products/:id", async (req, res) => {
   try {
-    const { name, origin, price, unit } = req.body;
+    const { name, price, unit } = req.body;
 
     if (!name || price == null) {
       return res
@@ -165,9 +166,9 @@ app.put("/api/products/:id", async (req, res) => {
       req.params.id,
       {
         name,
-        origin: origin || "",
         price: numericPrice,
         unit: unit || "unidad",
+        // OJO: origin NO se modifica aquí
       },
       { new: true }
     );
